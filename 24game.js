@@ -1,30 +1,28 @@
-function solve24(numStr) {
-  const nums = numStr.split("").map((i) => +i);
-
-  function permute(arr) {
+function getAllPermutations(arr, k) {
     const results = [];
 
-    function backtrack(current, remaining) {
-      if (remaining.length === 0) {
-        results.push(current.slice());
-        return;
-      }
-      for (let i = 0; i < remaining.length; i++) {
-        current.push(remaining[i]);
-        const nextRemaining = remaining
-          .slice(0, i)
-          .concat(remaining.slice(i + 1));
-        backtrack(current, nextRemaining);
-        current.pop();
-      }
+    // Вспомогательная функция для генерации всех перестановок
+    function permute(tempArr, remainingArr) {
+        if (tempArr.length === k) {
+            results.push(tempArr.slice());
+            return;
+        }
+        for (let i = 0; i < remainingArr.length; i++) {
+            const newTemp = tempArr.concat(remainingArr[i]);
+            const newRemaining = remainingArr.slice(0, i).concat(remainingArr.slice(i + 1));
+            permute(newTemp, newRemaining);
+        }
     }
 
-    backtrack([], arr);
+    permute([], arr);
     return results;
-  }
+}
 
-  const numberPairs = permute(nums);
 
+function solve24(numStr) {
+  const nums = numStr.split("").map((i) => +i);
+  const numberPairs = getAllPermutations(nums, 2);
+  console.log(numberPairs)
   const TARGET = 24;
 
   const result = "";
@@ -36,14 +34,8 @@ function solve24(numStr) {
 
   const operations = [multiplication, division, addition, subtraction];
 
-  const operationPairs = [];
-  for (let i = 0; i < nums.length; i++) {
-    for (let j = i + 1; j < nums.length; j++) {
-      for (let k = i + 1; j < nums.length; j++) {
-        operationPairs.push();
-      }
-    }
-  }
+  const operationPairs = getAllPermutations(operations, 3);
+  console.log(operationPairs)
 
   // 3 операции в одном выражении,
   // 2 из них между двумя парами
@@ -56,7 +48,7 @@ function solve24(numStr) {
     return [result1, result2];
   };
   console.log(
-    action(numberPairs[0], numberPairs[10], [
+    action(numberPairs[0], numberPairs[11], [
       multiplication,
       multiplication,
       multiplication,
