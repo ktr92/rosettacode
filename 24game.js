@@ -22,7 +22,6 @@ function getAllPermutations(arr, k) {
 function solve24(numStr) {
   const nums = numStr.split("").map((i) => +i);
   const numberPairs = getAllPermutations(nums, 2);
-  console.log(numberPairs)
   const TARGET = 24;
 
   const result = "";
@@ -35,7 +34,6 @@ function solve24(numStr) {
   const operations = [multiplication, division, addition, subtraction];
 
   const operationPairs = getAllPermutations(operations, 3);
-  console.log(operationPairs)
 
   // 3 операции в одном выражении,
   // 2 из них между двумя парами
@@ -45,15 +43,23 @@ function solve24(numStr) {
     const right = operators[1](pairB);
     const result1 = operators[2]([left, right]);
     const result2 = operators[2]([right, left]);
-    return [result1, result2];
+    if (result1 === TARGET) {
+     console.log(result1, pairA, pairB, operators)
+    }
+    if (result2 === TARGET) {
+     console.log(result2, pairB, pairA, operators)
+    }
   };
-  console.log(
-    action(numberPairs[0], numberPairs[11], [
-      multiplication,
-      multiplication,
-      multiplication,
-    ]),
-  );
+
+  for (let i = 0; i < numberPairs.length; i++) {
+   for (let j = 0; j < numberPairs.length; j++) {
+    for (let k = 0; k < operationPairs.length; k++) {
+      action(numberPairs[i], numberPairs[j], operationPairs[k])
+    }
+   }
+  }
+
+ 
   return true;
 }
 
