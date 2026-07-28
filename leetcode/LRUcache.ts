@@ -38,7 +38,20 @@ Constraints:
 0 <= value <= 105
 At most 2 * 105 calls will be made to get and put.
  */
+
+/** */
+class Node {
+  public next: Node | null = null
+  public prev: Node | null = null
+  constructor(public key: number, public value: number) {}
+}
+
 class LRUCache {
+  private capacity: number;
+  private cache: Map<number, Node>;
+  private head: Node;
+  private tail: Node;
+
   constructor(capacity: number) {
     if (capacity <= 0) {
       throw new Error("LRU cache must be positive number");
@@ -47,21 +60,15 @@ class LRUCache {
       throw new Error("LRU cache maximum size is 3000");
     }
     this.capacity = capacity;
-    this.cache = [];
+    this.cache = new Map();
+    this.head = new Node(0, 0);
+    this.tail = new Node(0, 0);
   }
 
-  private capacity: number;
-  private cache: number[][];
+
 
   private setFirst(index: number) {
-    const [el] = this.cache.splice(index, 1);
-    if (el) {
-      this.cache.splice(0, 0, el);
-    }
-  }
-
-  private logger(value?: number) {
-    console.log("\n CACHE STATE:\n", this.cache, value ? value : "");
+    
   }
 
   private isKeyExist(index: number) {
@@ -78,12 +85,10 @@ class LRUCache {
   get(key: number): number {
     const index = this.getIndex(key);
     if (!this.isKeyExist(index)) {
-      //this.logger(-1);
       return -1;
     } else {
       const value = this.cache[index];
       this.setFirst(index);
-      //this.logger(value[1]);
       return this.isValueExist(value) && this.isValueExist(value[1]) ? value[1] : -1;
     }
   }
@@ -106,8 +111,6 @@ class LRUCache {
     } else {
       this.cache.unshift([key, value]);
     }
-
-    //this.logger();
   }
 }
 
