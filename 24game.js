@@ -54,12 +54,16 @@ function solve24(numStr) {
   for (let i = 0; i < numberPairs.length; i++) {
    for (let j = 0; j < numberPairs.length; j++) {
     for (let k = 0; k < operationPairs.length; k++) {
+      if () {
+        
+      }
       action(numberPairs[i], numberPairs[j], operationPairs[k])
     }
    }
   }
 
- 
+  console.log(numberPairs)
+
   return true;
 }
 
