@@ -38,11 +38,6 @@ Constraints:
 0 <= value <= 105
 At most 2 * 105 calls will be made to get and put.
  */
-interface cacheCell {
-  key: number;
-  val: number;
-  use: number;
-}
 class LRUCache {
   constructor(capacity: number) {
     if (capacity <= 0) {
@@ -52,57 +47,57 @@ class LRUCache {
       throw new Error("LRU cache maximum size is 3000");
     }
     this.capacity = capacity;
-    this.cache = []
+    this.cache = [];
   }
 
   private capacity: number;
-  private cache: cacheCell[];
+  private cache: number[][];
 
-  private cacheSort(value: cacheCell) {
-    this.cache.map((item) => (item.use += 1));
-    value.use = 0;
-    this.cache.sort((a, b) => (a.use > b.use ? 1 : -1));
+  private setFirst(index: number) {
+    const [el] = this.cache.splice(index, 1);
+    this.cache.splice(0, 0, el);
+    //this.cache.map((item) => (item.use += 1));
+    //value.use = 0;
+    //this.cache.sort((a, b) => (a.use > b.use ? 1 : -1));
   }
 
   private logger(value?: number) {
-    console.log('\n CACHE STATE:\n', this.cache, value ? value : '');
+    //console.log("\n CACHE STATE:\n", this.cache, value ? value : "");
   }
 
   get(key: number): number {
-    const index = this.cache.findIndex((item) => item ? item.key === key : false);
+    const index = Object.keys(this.cache).findIndex((k) =>
+      k ? Number(k) === key : false,
+    );
     if (!index || !this.cache[index]) {
       this.logger(-1);
       return -1;
     } else {
       const value = this.cache[index];
-      this.cacheSort(value);
-      this.logger(value.val);
-      return value.val;
+      this.setFirst(index);
+      //this.cacheSort(value);
+      this.logger(value[1]);
+      return value[1] ? value[1] : -1;
     }
   }
 
   put(key: number, value: number): void {
-    if (this.cache.length) {
-      const index = this.cache.findIndex((item) => item ? item.key === key : false);
+    const cacheSize = Object.keys(this.cache).length;
+    if (cacheSize) {
+      const index = Object.keys(this.cache).findIndex((k) =>
+        k ? Number(k) === key : false,
+      );
       if (!index || !this.cache[index]) {
-        if (this.cache.length >= this.capacity) {
+        if (cacheSize >= this.capacity) {
           this.cache.pop();
         }
-        this.cache.unshift({
-          key: key,
-          val: value,
-          use: 0,
-        });
+        this.cache.unshift([key, value])
       } else {
-        this.cache[index].val = value;
-        this.cache[index].use = 0;
+         this.cache[index][1] = value;
+         this.setFirst(index);
       }
     } else {
-      this.cache.push({
-          key: key,
-          val: value,
-          use: 0,
-        });
+      this.cache.unshift([key, value])
     }
 
     this.logger();
@@ -112,13 +107,13 @@ class LRUCache {
 const lRUCache = new LRUCache(2);
 lRUCache.put(1, 1); // cache is {1=1}
 lRUCache.put(2, 2); // cache is {1=1, 2=2}
-lRUCache.get(1);    // return 1
+lRUCache.get(1); // return 1
 lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
-lRUCache.get(2);    // returns -1 (not found)
+lRUCache.get(2); // returns -1 (not found)
 lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
-lRUCache.get(1);    // return -1 (not found)
-lRUCache.get(3);    // return 3
-lRUCache.get(4);    // return 4
+lRUCache.get(1); // return -1 (not found)
+lRUCache.get(3); // return 3
+lRUCache.get(4); // return 4
 /**
  * Your LRUCache object will be instantiated and called as such:
  * var obj = new LRUCache(capacity)
