@@ -103,19 +103,29 @@ class LRUCache {
   }
 
   public getSize() {
-    return `size: ${this.cache.size}, head: ${this.head.key}, tail: ${this.tail.key}`;
+    console.log("========================================");
+    console.log("head: ", this.head);
+    console.log("tail: ", this.tail);
+    /*     return `size: ${this.cache.size}, cache: ${this.cache.}, tail: ${this.tail.key}`;
+     */ return this.cache;
   }
 
   get(key: number): number {
     const isKey = this.cache.has(key);
     if (!isKey) {
+      console.log(this.getSize());
+
       return -1;
     } else {
       const value = this.cache.get(key);
+      this.setFirst(key);
       if (value) {
-        this.setFirst(key);
+        console.log(this.getSize());
+
         return value.value;
       }
+      console.log(this.getSize());
+
       return -1;
     }
   }
@@ -137,7 +147,7 @@ class LRUCache {
           this.cache.set(key, {
             key,
             value,
-            next: this.head,
+            next: null,
             prev: null,
           });
         }
@@ -146,10 +156,10 @@ class LRUCache {
         const oldTail = this.tail;
         const newTail = oldTail.prev;
         if (oldTail && newTail) {
-          this.cache.delete(oldTail.key);
           this.tail = newTail;
           newTail.next = null;
         }
+        this.cache.delete(oldTail.key);
 
         this.cache.set(key, {
           key,
@@ -169,8 +179,10 @@ class LRUCache {
       const newel = this.cache.get(key);
       if (newel) {
         this.tail = newel;
+        this.head = newel;
       }
     }
+    console.log(this.getSize());
   }
 }
 
@@ -184,8 +196,6 @@ lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
 lRUCache.get(1); // return -1 (not found)
 lRUCache.get(3); // return 3
 lRUCache.get(4); // return 4
-
-console.log(lRUCache.getSize());
 
 /**
  * Your LRUCache object will be instantiated and called as such:
