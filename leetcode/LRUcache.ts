@@ -40,17 +40,22 @@ At most 2 * 105 calls will be made to get and put.
  */
 
 /** */
-class Node {
-  public next: Node | null = null
-  public prev: Node | null = null
-  constructor(public key: number, public value: number) {}
+class LinkedNode {
+  public next: LinkedNode | null = null;
+  public prev: LinkedNode | null = null;
+  public key: number;
+  public value: number;
+  constructor(key: number, value: number) {
+    this.key = key;
+    this.value = value;
+  }
 }
 
 class LRUCache {
   private capacity: number;
-  private cache: Map<number, Node>;
-  private head: Node;
-  private tail: Node;
+  private cache: Map<number, LinkedNode>;
+  private head: LinkedNode;
+  private tail: LinkedNode;
 
   constructor(capacity: number) {
     if (capacity <= 0) {
@@ -61,56 +66,60 @@ class LRUCache {
     }
     this.capacity = capacity;
     this.cache = new Map();
-    this.head = new Node(0, 0);
-    this.tail = new Node(0, 0);
+    this.head = new LinkedNode(0, 0);
+    this.tail = new LinkedNode(0, 0);
   }
 
-
-
-  private setFirst(index: number) {
-    
-  }
-
-  private isKeyExist(index: number) {
-    return index >= 0;
-  }
-  private isValueExist(value: unknown) {
-    return typeof value !== 'undefined'
-  }
-
-  private getIndex(key: number) {
-    return this.cache.findIndex((k) => k[0] === key);
+  private setFirst(key: number) {
+    const first = this.cache.get(key);
+    const second = this.head;
+    if (first) {
+      first.next = second;
+      second.prev = first;
+      if (!first.next) {
+        this.tail = second;
+      }
+      this.head = first;
+    }
   }
 
   get(key: number): number {
-    const index = this.getIndex(key);
-    if (!this.isKeyExist(index)) {
+    const isKey = this.cache.has(key);
+
+    if (!isKey) {
       return -1;
     } else {
-      const value = this.cache[index];
-      this.setFirst(index);
-      return this.isValueExist(value) && this.isValueExist(value[1]) ? value[1] : -1;
+      const value = this.cache.get(key);
+
+      if (value) {
+        this.setFirst(key);
+        return value.value;
+      }
+      return -1;
     }
   }
 
   put(key: number, value: number): void {
-    const cacheSize = Object.keys(this.cache).length;
+    const cacheSize = this.cache.size;
     if (cacheSize) {
-      const index = this.getIndex(key);
-      if (!this.isKeyExist(index)) {
-        if (cacheSize >= this.capacity) {
-          this.cache.pop();
-        }
-        this.cache.unshift([key, value]);
-      } else {
-        if (this.isValueExist(this.cache[index])) {
-          this.cache[index][1] = value;
-          this.setFirst(index);
-        }
+      if (cacheSize >= this.capacity) {
+        const prevTail = this.tail.prev;
+        this.cache.delete(this.tail.key);
+        this.tail = prevTail;
       }
-    } else {
-      this.cache.unshift([key, value]);
     }
+    const isKey = this.cache.has(key);
+    if (!isKey) {
+      const second = this.head;
+      this.cache.set(key, {
+        key,
+        value,
+        prev: null,
+        next: this.head,
+      });
+    }
+    console.log(this.cache.size)
+    this.setFirst(key);
   }
 }
 
@@ -123,6 +132,7 @@ lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
 lRUCache.get(1); // return -1 (not found)
 lRUCache.get(3); // return 3
 lRUCache.get(4); // return 4
+
 /**
  * Your LRUCache object will be instantiated and called as such:
  * var obj = new LRUCache(capacity)
