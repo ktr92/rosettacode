@@ -70,13 +70,23 @@ class LRUCache {
     this.tail = new LinkedNode(0, 0);
   }
 
-  private setFirst(key: number) {
-    const exFirst = this.head;
+  private addItem(key: number, value: number) {
+    this.cache.set(key, {
+      key,
+      value,
+      next: null,
+      prev: null,
+    });
+    this.changeHead(key);
+  }
+
+  private changeHead(key: number) {
+    const head = this.head;
     const newFirst = this.cache.get(key);
 
-    if (newFirst && exFirst !== newFirst) {
+    if (newFirst && head !== newFirst) {
       // старый ссылается назад на новый
-      exFirst.prev = newFirst;
+      head.prev = newFirst;
       // если новый стоял за старым, то надо чтобы старый ссылался вперед на то, на что ссылался новый
 
       // если новый уже был
@@ -97,61 +107,27 @@ class LRUCache {
       }
 
       // Новый ссылается вперед на старый
-      newFirst.next = exFirst;
+      newFirst.next = head;
       newFirst.prev = null;
+      this.head = newFirst;
     }
   }
 
-  public getSize() {
-    console.log("========================================");
-    console.log("head: ", this.head);
-    console.log("tail: ", this.tail);
-    /*     return `size: ${this.cache.size}, cache: ${this.cache.}, tail: ${this.tail.key}`;
-     */ return this.cache;
-  }
-
   get(key: number): number {
-    const isKey = this.cache.has(key);
-    if (!isKey) {
-      console.log(this.getSize());
-
+    const value = this.cache.get(key);
+    if (!value) {
       return -1;
     } else {
-      const value = this.cache.get(key);
-      this.setFirst(key);
-      if (value) {
-        console.log(this.getSize());
-
-        return value.value;
-      }
-      console.log(this.getSize());
-
-      return -1;
+      this.changeHead(key);
+      return value.value;
     }
   }
 
   put(key: number, value: number): void {
     const cacheSize = this.cache.size;
-    // если кеш не пустой, надо проверить заполнение кеша и удалить хвост если нужно.
     if (cacheSize > 0) {
       if (cacheSize < this.capacity) {
-        const existed = this.cache.get(key);
-        if (existed) {
-          this.cache.set(key, {
-            key,
-            value,
-            next: existed.next,
-            prev: existed.prev,
-          });
-        } else {
-          this.cache.set(key, {
-            key,
-            value,
-            next: null,
-            prev: null,
-          });
-        }
-        this.setFirst(key);
+        this.addItem(key, value);        
       } else {
         const oldTail = this.tail;
         const newTail = oldTail.prev;
@@ -160,29 +136,16 @@ class LRUCache {
           newTail.next = null;
         }
         this.cache.delete(oldTail.key);
-
-        this.cache.set(key, {
-          key,
-          value,
-          next: null,
-          prev: null,
-        });
-        this.setFirst(key);
+        this.addItem(key, value);
       }
     } else {
-      this.cache.set(key, {
-        key,
-        value,
-        next: null,
-        prev: null,
-      });
+      this.addItem(key, value);
       const newel = this.cache.get(key);
       if (newel) {
         this.tail = newel;
         this.head = newel;
       }
     }
-    console.log(this.getSize());
   }
 }
 
