@@ -77,9 +77,27 @@ class LRUCache {
       next: null,
       prev: null,
     });
-    this.changeHead(key);
   }
-
+  private updateItem(
+    key: number,
+    value: number,
+    prev: null | LinkedNode = null,
+    next: null | LinkedNode = null,
+  ) {
+    this.cache.set(key, {
+      key,
+      value,
+      next,
+      prev,
+    });
+  }
+  public getSize() {
+    console.log("========================================");
+    console.log("head: ", this.head);
+    console.log("tail: ", this.tail);
+    /*     return `size: ${this.cache.size}, cache: ${this.cache.}, tail: ${this.tail.key}`;
+     */ return this.cache;
+  }
   private changeHead(key: number) {
     const head = this.head;
     const newFirst = this.cache.get(key);
@@ -110,15 +128,18 @@ class LRUCache {
       newFirst.next = head;
       newFirst.prev = null;
       this.head = newFirst;
+      this.head.prev = null;
     }
   }
 
   get(key: number): number {
     const value = this.cache.get(key);
     if (!value) {
+      console.log(this.getSize());
       return -1;
     } else {
       this.changeHead(key);
+      console.log(this.getSize());
       return value.value;
     }
   }
@@ -126,17 +147,25 @@ class LRUCache {
   put(key: number, value: number): void {
     const cacheSize = this.cache.size;
     if (cacheSize > 0) {
-      if (cacheSize < this.capacity) {
-        this.addItem(key, value);        
+      
+      const exist = this.cache.get(key);
+      if (typeof exist !== "undefined") {
+        this.updateItem(key, value, exist.prev, exist.next);
+        this.changeHead(key);
       } else {
-        const oldTail = this.tail;
-        const newTail = oldTail.prev;
-        if (oldTail && newTail) {
-          this.tail = newTail;
-          newTail.next = null;
+        
+        if (cacheSize >= this.capacity) {
+          const oldTail = this.tail;
+          const newTail = oldTail.prev;
+          if (oldTail && newTail) {
+            this.tail = newTail;
+            newTail.next = null;
+          }
+          this.cache.delete(oldTail.key);
         }
-        this.cache.delete(oldTail.key);
+        
         this.addItem(key, value);
+        this.changeHead(key);
       }
     } else {
       this.addItem(key, value);
@@ -146,11 +175,18 @@ class LRUCache {
         this.head = newel;
       }
     }
+    console.log(this.getSize());
   }
 }
 
 const lRUCache = new LRUCache(2);
-lRUCache.put(1, 1); // cache is {1=1}
+lRUCache.put(2, 1);
+lRUCache.put(1, 1);
+lRUCache.put(2, 3);
+lRUCache.put(4, 1);
+lRUCache.get(1);
+lRUCache.get(2);
+/* lRUCache.put(1, 1); // cache is {1=1}
 lRUCache.put(2, 2); // cache is {1=1, 2=2}
 lRUCache.get(1); // return 1
 lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
@@ -158,7 +194,7 @@ lRUCache.get(2); // returns -1 (not found)
 lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
 lRUCache.get(1); // return -1 (not found)
 lRUCache.get(3); // return 3
-lRUCache.get(4); // return 4
+lRUCache.get(4); // return 4 */
 
 /**
  * Your LRUCache object will be instantiated and called as such:
