@@ -71,22 +71,29 @@ class LRUCache {
   }
 
   private setFirst(key: number) {
+    // новый элемент
     const newFirst = this.cache.get(key);
+    // старый элемент
     const exFirst = this.head;
 
     if (newFirst) {
+      // новый элемент становится предыдущим для старого
       newFirst.next = exFirst;
+      newFirst.prev = null;
+
       exFirst.prev = newFirst;
-      if (!newFirst.next) {
+      // если у старого не было следующего, значит это новый хвост
+      /* if (!exFirst.next) {
         this.tail = exFirst;
-      }
+      } */
+      // новая голова
       this.head = newFirst;
     }
   }
 
   public getSize() {
-      return this.cache.size
-    }
+    return `size: ${this.cache.size}, head: ${this.head.key}, tail: ${this.tail.key}`;
+  }
 
   get(key: number): number {
     const isKey = this.cache.has(key);
@@ -104,24 +111,39 @@ class LRUCache {
 
   put(key: number, value: number): void {
     const cacheSize = this.cache.size;
-    if (cacheSize) {
+    // если кеш не пустой, надо проверить заполнение кеша и удалить хвост если нужно.
+    if (cacheSize > 0) {
+      // если кеш заполнен
+
       if (cacheSize >= this.capacity) {
+        // сохраняем предыдущий для текущего хвоста
         const prevTail = this.tail.prev;
-          this.tail = prevTail;
-  
+        // удаляем текущий хвост
         this.cache.delete(this.tail.key);
+        // переопределяем текущий хвост
+        this.tail = prevTail;
+        this.tail.next = null;
       }
-    }
-    
-    const isKey = this.cache.has(key);
-    if (!isKey) {
+      // проверяем наличие ключа
       this.cache.set(key, {
         key,
         value,
         prev: null,
-        next: this.head,
+        next: null,
       });
+
       this.setFirst(key);
+    } else {
+      this.cache.set(key, {
+        key,
+        value,
+        prev: null,
+        next: null,
+      });
+      const newel = this.cache.get(key);
+      if (newel) {
+        this.tail = newel;
+      }
     }
   }
 }
@@ -136,7 +158,7 @@ lRUCache.get(1); // return -1 (not found)
 lRUCache.get(3); // return 3
 lRUCache.get(4); // return 4
 
-console.log(lRUCache.getSize())
+console.log(lRUCache.getSize());
 
 /**
  * Your LRUCache object will be instantiated and called as such:
