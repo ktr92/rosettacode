@@ -71,23 +71,34 @@ class LRUCache {
   }
 
   private setFirst(key: number) {
-    // новый элемент
-    const newFirst = this.cache.get(key);
-    // старый элемент
     const exFirst = this.head;
+    const newFirst = this.cache.get(key);
 
-    if (newFirst) {
-      // новый элемент становится предыдущим для старого
+    if (newFirst && exFirst !== newFirst) {
+      // старый ссылается назад на новый
+      exFirst.prev = newFirst;
+      // если новый стоял за старым, то надо чтобы старый ссылался вперед на то, на что ссылался новый
+
+      // если новый уже был
+      if (newFirst.next || newFirst.prev) {
+        const nextForNewFirst = newFirst.next;
+        const prevForNewFirst = newFirst.prev;
+
+        if (nextForNewFirst) {
+          nextForNewFirst.prev = prevForNewFirst;
+        }
+        if (prevForNewFirst) {
+          // если новый был хвостом, то новый хвост это его предшественник
+          if (newFirst === this.tail) {
+            this.tail = prevForNewFirst;
+          }
+          prevForNewFirst.next = nextForNewFirst;
+        }
+      }
+
+      // Новый ссылается вперед на старый
       newFirst.next = exFirst;
       newFirst.prev = null;
-
-      exFirst.prev = newFirst;
-      // если у старого не было следующего, значит это новый хвост
-      /* if (!exFirst.next) {
-        this.tail = exFirst;
-      } */
-      // новая голова
-      this.head = newFirst;
     }
   }
 
@@ -113,32 +124,47 @@ class LRUCache {
     const cacheSize = this.cache.size;
     // если кеш не пустой, надо проверить заполнение кеша и удалить хвост если нужно.
     if (cacheSize > 0) {
-      // если кеш заполнен
+      if (cacheSize < this.capacity) {
+        const existed = this.cache.get(key);
+        if (existed) {
+          this.cache.set(key, {
+            key,
+            value,
+            next: existed.next,
+            prev: existed.prev,
+          });
+        } else {
+          this.cache.set(key, {
+            key,
+            value,
+            next: this.head,
+            prev: null,
+          });
+        }
+        this.setFirst(key);
+      } else {
+        const oldTail = this.tail;
+        const newTail = oldTail.prev;
+        if (oldTail && newTail) {
+          this.cache.delete(oldTail.key);
+          this.tail = newTail;
+          newTail.next = null;
+        }
 
-      if (cacheSize >= this.capacity) {
-        // сохраняем предыдущий для текущего хвоста
-        const prevTail = this.tail.prev;
-        // удаляем текущий хвост
-        this.cache.delete(this.tail.key);
-        // переопределяем текущий хвост
-        this.tail = prevTail;
-        this.tail.next = null;
+        this.cache.set(key, {
+          key,
+          value,
+          next: null,
+          prev: null,
+        });
+        this.setFirst(key);
       }
-      // проверяем наличие ключа
-      this.cache.set(key, {
-        key,
-        value,
-        prev: null,
-        next: null,
-      });
-
-      this.setFirst(key);
     } else {
       this.cache.set(key, {
         key,
         value,
-        prev: null,
         next: null,
+        prev: null,
       });
       const newel = this.cache.get(key);
       if (newel) {
@@ -149,8 +175,9 @@ class LRUCache {
 }
 
 const lRUCache = new LRUCache(2);
-lRUCache.put(2, 1); // cache is {1=1}
-lRUCache.get(2); // return 1
+lRUCache.put(1, 1); // cache is {1=1}
+lRUCache.put(2, 2); // cache is {1=1, 2=2}
+lRUCache.get(1); // return 1
 lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
 lRUCache.get(2); // returns -1 (not found)
 lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
