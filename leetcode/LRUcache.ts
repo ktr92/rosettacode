@@ -71,26 +71,29 @@ class LRUCache {
   }
 
   private setFirst(key: number) {
-    const first = this.cache.get(key);
-    const second = this.head;
-    if (first) {
-      first.next = second;
-      second.prev = first;
-      if (!first.next) {
-        this.tail = second;
+    const newFirst = this.cache.get(key);
+    const exFirst = this.head;
+
+    if (newFirst) {
+      newFirst.next = exFirst;
+      exFirst.prev = newFirst;
+      if (!newFirst.next) {
+        this.tail = exFirst;
       }
-      this.head = first;
+      this.head = newFirst;
     }
   }
 
+  public getSize() {
+      return this.cache.size
+    }
+
   get(key: number): number {
     const isKey = this.cache.has(key);
-
     if (!isKey) {
       return -1;
     } else {
       const value = this.cache.get(key);
-
       if (value) {
         this.setFirst(key);
         return value.value;
@@ -104,22 +107,22 @@ class LRUCache {
     if (cacheSize) {
       if (cacheSize >= this.capacity) {
         const prevTail = this.tail.prev;
+          this.tail = prevTail;
+  
         this.cache.delete(this.tail.key);
-        this.tail = prevTail;
       }
     }
+    
     const isKey = this.cache.has(key);
     if (!isKey) {
-      const second = this.head;
       this.cache.set(key, {
         key,
         value,
         prev: null,
         next: this.head,
       });
+      this.setFirst(key);
     }
-    console.log(this.cache.size)
-    this.setFirst(key);
   }
 }
 
@@ -132,6 +135,8 @@ lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
 lRUCache.get(1); // return -1 (not found)
 lRUCache.get(3); // return 3
 lRUCache.get(4); // return 4
+
+console.log(lRUCache.getSize())
 
 /**
  * Your LRUCache object will be instantiated and called as such:
