@@ -102,7 +102,7 @@ class LRUCache {
     const head = this.head;
     const newFirst = this.cache.get(key);
 
-    if (newFirst && head !== newFirst) {
+    if (newFirst && head.key !== newFirst.key) {
       // старый ссылается назад на новый
       head.prev = newFirst;
       // если новый стоял за старым, то надо чтобы старый ссылался вперед на то, на что ссылался новый
@@ -117,7 +117,7 @@ class LRUCache {
         }
         if (prevForNewFirst) {
           // если новый был хвостом, то новый хвост это его предшественник
-          if (newFirst === this.tail) {
+          if (newFirst.key === this.tail.key) {
             this.tail = prevForNewFirst;
           }
           prevForNewFirst.next = nextForNewFirst;
