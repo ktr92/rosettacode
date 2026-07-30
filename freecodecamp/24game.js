@@ -69,13 +69,16 @@ function solve24(numStr) {
 
   for (let i = 0; i < numberPairs.length; i++) {
     for (let j = 0; j < numberPairs.length; j++) {
-      for (let k = 0; k < 4; k++) {
+      if (i !== j) {
+        for (let k = 0; k < 4; k++) {
         for (let l = 0; l < 4; l++) {
           for (let m = 0; m < 4; m++) {
             action(numberPairs[i], numberPairs[j], [operations[k], operations[l], operations[m]]);
           }
         }
       }
+      }
+      
     }
   }
 
