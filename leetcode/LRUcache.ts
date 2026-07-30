@@ -73,45 +73,57 @@ class LRUCache {
   }
 
   public getSize(val?: string) {
-    console.log("========================================");
-
-    console.log("head: ", this.head);
-    console.log("tail: ", this.tail);
+    //console.log("head: ", this.head);
+    console.log(
+      val,
+      " head: ",
+      [this.head.key, this.head.next ? this.head.next.key : "NOOO"],
+      " tail: ",
+      [this.tail.key, this.tail.prev ? this.tail.prev.key : "FAIL"],
+    );
     /*     return `size: ${this.cache.size}, cache: ${this.cache.}, tail: ${this.tail.key}`;
      */
-    return this.cache;
+    // return this.cache;
   }
+
   private changeHead(key: number) {
     const newHead = this.cache.get(key);
-
-    if (newHead) {
+    const oldHead = this.head;
+    if (newHead && newHead.key !== oldHead.key) {
       if (this.tail.key === newHead.key && newHead.prev) {
         this.tail = newHead.prev;
         this.tail.next = null;
-      }
-      this.head.prev = newHead;
-      newHead.next = this.head;
-      this.head = newHead;
-      this.head.prev = null;
+      } 
+        oldHead.prev = newHead;
+        newHead.next = oldHead;
+
+        this.head = newHead;
+        this.head.prev = null;
+    
     }
   }
 
   private deleteItem(key: number) {
     const item = this.cache.get(key);
     if (item) {
-      // change next item's prev option
-      if (item.next) {
-        item.next.prev = item.prev;
-      }
-      // change prev item's next option
-      if (item.prev) {
-        item.prev.next = item.next;
-      }
       // change tail
       if (this.tail.key === key && item.prev) {
         this.tail = item.prev;
         this.tail.next = null;
-      } 
+      } else if (this.head.key === key && item.next) {
+        this.head = item.next;
+        this.head.prev = null;
+      } else {
+        // change next item's prev option
+        if (item.next) {
+          item.next.prev = item.prev;
+        }
+        // change prev item's next option
+        if (item.prev) {
+          item.prev.next = item.next;
+        }
+      }
+
       this.cache.delete(key);
     }
   }
@@ -127,24 +139,21 @@ class LRUCache {
   }
 
   put(key: number, value: number): void {
-    const cacheSize = this.cache.size;
-    if (cacheSize > 0) {
-      const exist = this.cache.get(key);
-      if (typeof exist !== "undefined") {
-        this.deleteItem(key);
-      } else {
-        if (cacheSize >= this.capacity) {
-          this.deleteItem(this.tail.key);
-        }
-      }
-      this.addItem(key, value);
-      this.changeHead(key);
-    } else {
-      this.addItem(key, value);
-      const newel = this.cache.get(key);
-      if (newel) {
-        this.tail = newel;
-        this.head = newel;
+    const exist = this.cache.has(key);
+    if (exist) {
+      this.deleteItem(key);
+    }
+    this.addItem(key, value);
+    this.changeHead(key);
+    if (this.cache.size > this.capacity) {
+      this.deleteItem(this.tail.key);
+    }
+
+    if (this.cache.size === 1) {
+      const singleNode = this.cache.get(key);
+      if (singleNode) {
+        this.tail = singleNode;
+        //this.head = singleNode;
       }
     }
     //console.log(this.getSize());
@@ -381,6 +390,8 @@ if (typeof params[0] !== "undefined" && typeof params[0][0] !== "undefined") {
   const lRUCache = new LRUCache(params[0][0]);
 
   const result = command.map((item, index) => {
+    console.log("========================================");
+
     let val = null;
     if (index !== 0) {
       if (params[index] && typeof params[index][0] !== "undefined") {
@@ -392,7 +403,18 @@ if (typeof params[0] !== "undefined" && typeof params[0][0] !== "undefined") {
         }
       }
     }
-    console.log(lRUCache.getSize());
+
+    lRUCache.getSize(
+      index +
+        " " +
+        item +
+        " " +
+        "[" +
+        params[index][0] +
+        ", " +
+        (params[index][1] || "") +
+        "]",
+    );
 
     return val;
   });
