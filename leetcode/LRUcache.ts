@@ -91,12 +91,14 @@ class LRUCache {
       prev,
     });
   }
-  public getSize() {
+  public getSize(val: string) {
     console.log("========================================");
-    console.log("head: ", this.head);
-    console.log("tail: ", this.tail);
+    return "val: " + val;
+    //console.log("head: ", this.head);
+    //console.log("tail: ", this.tail);
     /*     return `size: ${this.cache.size}, cache: ${this.cache.}, tail: ${this.tail.key}`;
-     */ return this.cache;
+     */ 
+    /* return this.cache; */
   }
   private changeHead(key: number) {
     const head = this.head;
@@ -135,11 +137,11 @@ class LRUCache {
   get(key: number): number {
     const value = this.cache.get(key);
     if (!value) {
-      console.log(this.getSize());
+      console.log(this.getSize((key + ': ' + -1)));
       return -1;
     } else {
       this.changeHead(key);
-      console.log(this.getSize());
+      console.log(this.getSize(key + ': ' + value.value));
       return value.value;
     }
   }
@@ -175,17 +177,115 @@ class LRUCache {
         this.head = newel;
       }
     }
-    console.log(this.getSize());
+    //console.log(this.getSize());
   }
 }
 
-const lRUCache = new LRUCache(2);
-lRUCache.put(2, 1);
-lRUCache.put(1, 1);
-lRUCache.put(2, 3);
-lRUCache.put(4, 1);
-lRUCache.get(1);
+const lRUCache = new LRUCache(10);
+lRUCache.put(10, 13);
+lRUCache.put(3, 17);
+lRUCache.put(6, 11);
+lRUCache.put(10, 5);
+lRUCache.put(9, 10);
+lRUCache.get(13);
+lRUCache.put(2, 19);
 lRUCache.get(2);
+lRUCache.get(3);
+lRUCache.put(5, 25);
+lRUCache.get(8);
+lRUCache.put(9, 22);
+lRUCache.put(5, 5);
+lRUCache.put(1, 30);
+lRUCache.get(11);
+lRUCache.put(9, 12);
+lRUCache.get(7);
+lRUCache.get(5);
+lRUCache.get(8);
+lRUCache.get(9);
+lRUCache.put(4, 30);
+lRUCache.put(9, 3);
+lRUCache.get(9);
+lRUCache.put(10, 11);
+lRUCache.put(8, 14);
+lRUCache.get(2);
+lRUCache.put(1, 1);
+lRUCache.get(5);
+lRUCache.put(4, 4);
+lRUCache.get(11);
+lRUCache.put(12, 24);
+lRUCache.put(5, 18);
+lRUCache.put(13, 4);
+lRUCache.put(7, 23);
+lRUCache.get(8);
+lRUCache.put(12, 14);
+lRUCache.get(3);
+lRUCache.put(2, 12);
+lRUCache.get(5);
+lRUCache.put(2, 9);
+lRUCache.put(13, 4);
+lRUCache.put(8, 18);
+lRUCache.put(1, 7);
+lRUCache.get(6);
+lRUCache.put(9, 29);
+lRUCache.put(8, 21);
+lRUCache.put(5, 0);
+lRUCache.put(6, 30);
+lRUCache.put(1, 12);
+lRUCache.get(10);
+lRUCache.put(4, 15);
+lRUCache.put(7, 22);
+lRUCache.put(11, 26);
+lRUCache.put(8, 17);
+lRUCache.put(9, 29);
+lRUCache.put(5, 0);
+lRUCache.get(3);
+lRUCache.put(11, 30);
+lRUCache.get(12);
+lRUCache.put(4, 29);
+lRUCache.get(3);
+lRUCache.get(9);
+lRUCache.put(6, 0);
+lRUCache.get(3);
+lRUCache.put(1, 0);
+lRUCache.get(10);
+lRUCache.put(3, 29);
+lRUCache.put(10, 28);
+lRUCache.put(1, 20);
+lRUCache.put(11, 13);
+lRUCache.get(3);
+lRUCache.get(3);
+lRUCache.get(3);
+lRUCache.put(10, 9);
+lRUCache.put(3, 26);
+lRUCache.get(8);
+lRUCache.get(7);
+lRUCache.put(5, 2);
+lRUCache.put(13, 17);
+lRUCache.put(2, 27);
+lRUCache.put(11, 15);
+lRUCache.get(12);
+lRUCache.put(9, 19);
+lRUCache.put(2, 15);
+lRUCache.put(3, 16);
+lRUCache.get(1);
+lRUCache.put(12, 17);
+lRUCache.put(9, 1);
+lRUCache.put(6, 19);
+lRUCache.put(4, 0);
+lRUCache.put(5, 0);
+lRUCache.put(5, 2);
+lRUCache.put(8, 1);
+lRUCache.put(11, 7);
+lRUCache.put(5, 2);
+lRUCache.put(9, 28);
+lRUCache.get(1);
+lRUCache.put(2, 2);
+lRUCache.put(7, 4);
+lRUCache.put(4, 22);
+lRUCache.put(7, 24);
+lRUCache.put(9, 26);
+lRUCache.put(13, 28);
+lRUCache.put(11, 26);
 /* lRUCache.put(1, 1); // cache is {1=1}
 lRUCache.put(2, 2); // cache is {1=1, 2=2}
 lRUCache.get(1); // return 1
