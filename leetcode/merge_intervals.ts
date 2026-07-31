@@ -1,72 +1,54 @@
 function merge(intervals: number[][]): number[][] {
-  const result: number[][] = [];
-  const indexMap = new Map();
-  for (let i = 0; i < intervals.length; i++) {
-    const first_start = intervals[i][0];
-    const first_end = intervals[i][1];
-    for (let j = 0; j < intervals.length; j++) {
-      const second_start = intervals[j][0];
-      const second_end = intervals[j][1];
-      if (i !== j) {
-        if (first_start < second_start) {
-          if (first_end <= second_end && first_end >= second_start) {
-            if (!indexMap.has(j) && !indexMap.has(i)) {
-              result.push([first_start, second_end]);
-              indexMap.set(i, true);
-              indexMap.set(j, true);
-            }
-          } else {
-            if (!indexMap.has(j) && !indexMap.has(i)) {
-              result.push([first_start, first_end]);
-               indexMap.set(i, true);
-                indexMap.set(j, true);
-            }
-          }
-        }
-        if (first_start > second_start) {
-          if (first_end >= second_end && first_end >= second_start) {
-              if (!indexMap.has(j) && !indexMap.has(i)) {
-                result.push([second_start, first_end]);
-                indexMap.set(i, true);
-                indexMap.set(j, true);
-              }
-        
-          } else {
-            if (!indexMap.has(j) && !indexMap.has(i)) {
-              result.push([first_start, first_end]);
-               indexMap.set(i, true);
-                indexMap.set(j, true);
-            }
-          }
-        }
-        if (first_start === second_end) {
-          if (first_end > second_start) {
-            if (!indexMap.has(j) && !indexMap.has(i)) {
-              result.push([second_start, first_end]);
-              indexMap.set(i, true);
-              indexMap.set(j, true);
-            }
-          }
-        }
-        if (!indexMap.has(i)) {
-          result.push([first_start, first_end]);
-           indexMap.set(i, true);
-        }
-        if (!indexMap.has(j)) {
-          result.push([second_start, second_end]);
-                indexMap.set(j, true);
-        }
+  const fillRange = (start: number, end: number) =>
+    Array.from({ length: end - start + 1 }, (_, index) => start + index);
+
+  const flat: number[] = [];
+
+  const edgesMap = new Map();
+
+  intervals.forEach((item: number[], index: number) => {
+    edgesMap.set(item[0], {
+      max: false,
+      min: true,
+    });
+    edgesMap.set(item[1], {
+      max: true,
+      min: false,
+    });
+    flat.push(...fillRange(item[0] as number, item[1] as number));
+  });
+  const sorted: number[] = [...new Set(flat)].sort((a: number, b: number) =>
+    a > b ? 1 : -1,
+  );
+
+  const merged: number[][] = [];
+  let start: number = 0;
+  console.log(sorted);
+  console.log(edgesMap);
+
+  for (let i = 0; i < sorted.length; i++) {
+    if (sorted[i] && sorted[i + 1]) {
+      const leftEdge = edgesMap.has(sorted[i]) ? edgesMap.get(sorted[i]).max : false;
+      const rightEdge = edgesMap.has(sorted[i + 1]) ? edgesMap.get(sorted[i + 1]).min : false;
+      const isEdge = leftEdge && rightEdge;
+      const isSiblings = (sorted[i + 1] as number) - (sorted[i] as number) > 1;
+
+      console.log(i, sorted[i], sorted[i + 1], isEdge, isSiblings);
+
+      if (i < sorted.length - 1 && (isSiblings || isEdge)) {
+        merged.push([sorted[start] as number, sorted[i] as number]);
+        start = i + 1;
+      }
+    } else {
+      if (sorted[i] !== sorted[start]) {
+      merged.push([sorted[start] as number, sorted[i] as number]);
+
       }
     }
   }
-  return result;
+  return merged;
 }
 
-const intervals = [
-  [1, 3],
-  [2, 6],
-  [8, 10],
-  [15, 18],
-];
+const intervals = [[1,4],[0,4]]
 
-console.log(merge(intervals)); // [[1,7]]
+console.log(merge(intervals)); // [[0,4]]
