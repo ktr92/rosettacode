@@ -11,9 +11,7 @@ function merge(intervals: number[][]): number[][] {
   function checkMerge(flat: number[]) {
     console.log("NEWFLAT: ", flat);
     console.log("NEWMERGE: ", merged);
-    /*  if (flat.length === merged.length) {
-      return merged;
-    } */
+   
     mergeMap.clear();
     merged.length = 0;
 
@@ -48,30 +46,27 @@ function merge(intervals: number[][]): number[][] {
           if (isPrev) {
             // если текущий можно слить со следующим
             if (current >= next && isEdge) {
-              const newArr = [...flat.filter((el, index) => index > i + 2)];
               if (nextEdge >= current) {
                 merged.push([prev, nextEdge]);
                 mergeMap.set(i, true);
                 mergeMap.set(i + 1, true);
                 mergeMap.set(i + 2, true);
+                const newArr = [...flat.filter((el, index) => index > i + 2)];
+                checkMerge([...merged.flat(), ...newArr]);
               } else {
                 merged.push([prev, current]);
                 mergeMap.set(i, true);
+                const newArr = [...flat.filter((el, index) => index > i + 2)];
+                checkMerge([...merged.flat(), ...newArr]);
               }
-              checkMerge([...merged.flat(), ...newArr]);
+
               break;
             } else {
               if (isEdge && current < next) {
                 merged.push([prev, current]);
                 mergeMap.set(i, true);
                 continue;
-              }
-              if (1) {
-                merged.push([current, next]);
-                mergeMap.set(i, true);
-                mergeMap.set(i + 1, true);
-                continue;
-              }
+              } 
             }
           }
           //
@@ -131,6 +126,7 @@ const intervals8 = [
   [2, 2],
   [4, 6],
 ];
+const intervals9 = [[0,2],[2,3],[4,4],[0,1],[5,7],[4,5],[0,0]];
 
 console.log("\n ========== merge: ", merge(intervals1)); // [[0,0],[1,4]]
 console.log("\n ========== merge: ", merge(intervals2)); // [[1,6],[8,10],[15,18]]
@@ -140,3 +136,4 @@ console.log("\n ========== merge: ", merge(intervals5)); // [[1,5]]
 console.log("\n ========== merge: ", merge(intervals6)); // [[1,4],[5,6]]
 console.log("\n ========== merge: ", merge(intervals7)); // [[0,5]]
 console.log("\n ========== merge: ", merge(intervals8)); // [[1,3],[4,7]]
+console.log("\n ========== merge: ", merge(intervals9)); // [[0,3],[4,7]]
