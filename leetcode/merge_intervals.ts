@@ -12,11 +12,12 @@ function merge(intervals: number[][]): number[][] {
   const flat = sorted.flat()
   console.log('\nflat: ', flat)
 
-  let parity = 'even';
 
   const added: number[] = []
 
   for (let i = 0; i < flat.length; i++) {  
+    let parity = i % 2 === 0 ? 'even' : 'odd'  
+
     const isLast = !flat[i + 1];
     const isFirst = !flat[i - 1];
     const isInside = !isFirst && !isLast && flat[i + 2];
@@ -30,6 +31,7 @@ function merge(intervals: number[][]): number[][] {
         if (parity === 'even' && flat[i] < flat[i + 1]) {
           merged.push([flat[i], flat[i + 1]])
         }
+        
       }
     } else {
       if (isLast) {
@@ -41,7 +43,6 @@ function merge(intervals: number[][]): number[][] {
       } 
     }
 
-    parity = i % 2 === 0 ? 'odd' : 'even'  
 
   }
   /* for (let i = start; i < end; i++) {  
