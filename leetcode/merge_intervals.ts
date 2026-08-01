@@ -1,63 +1,65 @@
 function merge(intervals: number[][]): number[][] {
-  const fillRange = (start: number, end: number) => {
-    if (start === end) {
-      return Array.from({ length: 2 }, (_, index) => start);
-    }
-    return Array.from({ length: end - start + 1 }, (_, index) => start + index);
-  }
-    
-
-  const flat: number[] = [];
-
-  const edgesMap = new Map();
-
-  intervals.forEach((item: number[], index: number) => {
-    edgesMap.set(`${item[0]}${item[1]}`, {
-      max: item[1],
-      min: item[0],
-      key: index
-    });
-    flat.push(...fillRange(item[0] as number, item[1] as number));
-  });
-  const sorted: number[] = flat.sort((a: number, b: number) =>
-    a > b ? 1 : -1,
-  );
-
-  const merged: number[][] = [];
-  let start: number = 0;
-  console.log(sorted);
-  console.log(edgesMap);
-
-  for (let i = 0; i < sorted.length; i++) {
-
-    if (sorted[i] === sorted[i + 1] && edgesMap.has(`${sorted[i]}${sorted[i+1]}`)) {
-      const min = edgesMap.get(`${sorted[i]}${sorted[i+1]}`).min
-      const max = edgesMap.get(`${sorted[i]}${sorted[i+1]}`).max
-      if (min === max) {
-         merged.push([sorted[i] as number, sorted[i+1] as number]);
-          start = i + 2
-      }
-    } else if (sorted[i] && sorted[i + 1]) {
-      const leftEdge = edgesMap.has(sorted[i]) ? edgesMap.get(sorted[i]).max : false;
-      const rightEdge = edgesMap.has(sorted[i + 1]) ? edgesMap.get(sorted[i + 1]).min : false;
-      const isEdge = leftEdge && rightEdge;
-      const isSiblings = (sorted[i + 1] as number) - (sorted[i] as number) > 1;
-
-/*       console.log(i, sorted[i], sorted[i + 1], isEdge, isSiblings);
+  const merged: number[][] = []
+  const sorted: number[][] = intervals.sort((a: number[], b: number[]) => a[0] > b[0] ? 1 : -1)
+/*   console.log(sorted)
  */
-      if (i < sorted.length - 1 && (isSiblings || isEdge)) {
-        merged.push([sorted[start] as number, sorted[i] as number]);
-        start = i + 1;
+  const egdeMap = new Map();
+  const size = sorted.length;
+
+  let start = sorted[0] ? sorted[0][0] as number : 0;
+  let end = sorted[size - 1] ? (sorted[size - 1]  as number[])[0] as number : 0;
+
+  const flat = sorted.flat()
+  console.log('\nflat: ', flat)
+
+  let parity = 'even';
+
+  const added: number[] = []
+
+  for (let i = 0; i < flat.length; i++) {  
+    const isLast = !flat[i + 1];
+    const isFirst = !flat[i - 1];
+    const isInside = !isFirst && !isLast && flat[i + 2];
+    const isMerge = flat[i] > flat[i + 1] && flat[i] < flat[i + 2];
+
+    if (isInside) {
+      if (isMerge && parity === 'odd') {
+         merged.push([flat[i - 1], flat[i + 2]]);
+      }
+      else {
+        if (parity === 'even' && flat[i] < flat[i + 1]) {
+          merged.push([flat[i], flat[i + 1]])
+        }
       }
     } else {
-      if (sorted[i] !== sorted[start]) {
-       merged.push([sorted[start] as number, sorted[i] as number]);
+      if (isLast) {
+        merged.push([flat[i-1], flat[i]])
       }
+      
+      if (flat[i] === flat[i+1] && parity === 'even') {
+        merged.push([flat[i], flat[i + 1]])
+      } 
     }
+
+    parity = i % 2 === 0 ? 'odd' : 'even'  
+
   }
+  /* for (let i = start; i < end; i++) {  
+    if (egdeMap.has(i)) {
+
+    }
+  } */
+
   return merged;
 }
 
-const intervals = [[1,4],[0,0]]
+const intervals1 = [[1,4],[0,0]]
+const intervals2 = [[1,3],[2,6],[8,10],[15,18]]
+const intervals3 = [[1,4],[4,5]]
+const intervals4 = [[4,7],[1,4]]
 
-console.log(merge(intervals)); // [[0,0],[1,4]]
+
+console.log('merge: ', merge(intervals1)); // [[0,0],[1,4]]
+console.log('merge: ', merge(intervals2)); // [[1,6],[8,10],[15,18]]
+console.log('merge: ', merge(intervals3)); // [[1,5]]
+console.log('merge: ', merge(intervals4)); // [[1,7]]
