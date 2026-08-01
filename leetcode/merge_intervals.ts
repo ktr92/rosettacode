@@ -11,6 +11,9 @@ function merge(intervals: number[][]): number[][] {
   function checkMerge(flat: number[]) {
     console.log("NEWFLAT: ", flat);
     console.log("NEWMERGE: ", merged);
+    mergeMap.clear();
+    merged.length = 0;
+
     for (let i = 0; i < flat.length; i++) {
       
       let parity = i % 2;
@@ -50,11 +53,11 @@ function merge(intervals: number[][]): number[][] {
               if (nextEdge >= current) {
                 merged.push([prev, nextEdge]);
                 checkMerge([...merged.flat(), ...newArr]);
-                break;
+                continue;
               } else {
                 merged.push([prev, current]);
                 checkMerge([...merged.flat(), ...newArr]);
-                break;
+                continue;
               }
             } else {
               if (isEdge && current < next) {
@@ -120,10 +123,10 @@ const intervals7 = [
   [3, 5],
 ];
 
-console.log("\nmerge: ", merge(intervals1)); // [[0,0],[1,4]]
-console.log("\nmerge: ", merge(intervals2)); // [[1,6],[8,10],[15,18]]
-console.log("\nmerge: ", merge(intervals3)); // [[1,5]]
-console.log("\nmerge: ", merge(intervals4)); // [[1,7]]
-console.log("\nmerge: ", merge(intervals5)); // [[1,5]]
-console.log("\nmerge: ", merge(intervals6)); // [[1,4],[5,6]]
-console.log("\nmerge: ", merge(intervals7)); // [[0,5]]
+console.log("\n ========== merge: ", merge(intervals1)); // [[0,0],[1,4]]
+console.log("\n ========== merge: ", merge(intervals2)); // [[1,6],[8,10],[15,18]]
+console.log("\n ========== merge: ", merge(intervals3)); // [[1,5]]
+console.log("\n ========== merge: ", merge(intervals4)); // [[1,7]]
+console.log("\n ========== merge: ", merge(intervals5)); // [[1,5]]
+console.log("\n ========== merge: ", merge(intervals6)); // [[1,4],[5,6]]
+console.log("\n ========== merge: ", merge(intervals7)); // [[0,5]]
