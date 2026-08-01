@@ -7,15 +7,17 @@ function merge(intervals: number[][]): number[][] {
    */
   const mergeMap = new Map();
   const startflat = sorted.flat();
-  
+
   function checkMerge(flat: number[]) {
     console.log("NEWFLAT: ", flat);
     console.log("NEWMERGE: ", merged);
+    /*  if (flat.length === merged.length) {
+      return merged;
+    } */
     mergeMap.clear();
     merged.length = 0;
 
     for (let i = 0; i < flat.length; i++) {
-      
       let parity = i % 2;
       const current = flat[i] as number;
       const isNext = typeof flat[i + 1] !== "undefined" ? true : false;
@@ -38,6 +40,7 @@ function merge(intervals: number[][]): number[][] {
               merged.push([current, next]);
               mergeMap.set(i, true);
               mergeMap.set(i + 1, true);
+              continue;
             }
           }
 
@@ -45,25 +48,22 @@ function merge(intervals: number[][]): number[][] {
           if (isPrev) {
             // если текущий можно слить со следующим
             if (current >= next && isEdge) {
-              mergeMap.set(i, true);
-              mergeMap.set(i + 1, true);
-              mergeMap.set(i + 2, true);
-
               const newArr = [...flat.filter((el, index) => index > i + 2)];
               if (nextEdge >= current) {
                 merged.push([prev, nextEdge]);
-                checkMerge([...merged.flat(), ...newArr]);
-                continue;
+                mergeMap.set(i, true);
+                mergeMap.set(i + 1, true);
+                mergeMap.set(i + 2, true);
               } else {
                 merged.push([prev, current]);
-                checkMerge([...merged.flat(), ...newArr]);
-                continue;
+                mergeMap.set(i, true);
               }
+              checkMerge([...merged.flat(), ...newArr]);
+              break;
             } else {
               if (isEdge && current < next) {
                 merged.push([prev, current]);
                 mergeMap.set(i, true);
-                mergeMap.set(i + 1, true);
                 continue;
               }
               if (1) {
@@ -122,6 +122,15 @@ const intervals7 = [
   [0, 2],
   [3, 5],
 ];
+const intervals8 = [
+  [2, 3],
+  [2, 2],
+  [3, 3],
+  [1, 3],
+  [5, 7],
+  [2, 2],
+  [4, 6],
+];
 
 console.log("\n ========== merge: ", merge(intervals1)); // [[0,0],[1,4]]
 console.log("\n ========== merge: ", merge(intervals2)); // [[1,6],[8,10],[15,18]]
@@ -130,3 +139,4 @@ console.log("\n ========== merge: ", merge(intervals4)); // [[1,7]]
 console.log("\n ========== merge: ", merge(intervals5)); // [[1,5]]
 console.log("\n ========== merge: ", merge(intervals6)); // [[1,4],[5,6]]
 console.log("\n ========== merge: ", merge(intervals7)); // [[0,5]]
+console.log("\n ========== merge: ", merge(intervals8)); // [[1,3],[4,7]]
