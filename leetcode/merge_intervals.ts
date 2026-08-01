@@ -13,6 +13,7 @@ function merge(intervals: number[][]): number[][] {
     let i = 0;
 
     while (i < flat.length) {
+      if (flat.length === 1) return flat
       let parity = i % 2;
       const current = flat[i] as number;
       const isNext = typeof flat[i + 1] !== "undefined" ? true : false;
@@ -44,26 +45,16 @@ function merge(intervals: number[][]): number[][] {
             // если текущий можно слить со следующим
             if (current >= next && isEdge) {
               if (nextEdge >= current) {
-                /* merged.push([prev, nextEdge]); */
-                flat.shift()
-                flat.shift()
-                flat.unshift([prev, nextEdge])
+                merged.push([prev, nextEdge]);
                 mergeMap.set(i, true);
                 mergeMap.set(i + 1, true);
                 mergeMap.set(i + 2, true);
-                 i = i - 1;
+                i = i - 1
               } else {
-               /*  merged.push([prev, current]); */
-                  flat.shift()
-                flat.shift()
-                flat.unshift([prev, current])
+                merged.push([prev, current]);
                 mergeMap.set(i, true);
-                i = i - 1;
-              
+                i = i - 1
               }
-              
-            
-           
             } else {
               if (isEdge && current < next) {
                 merged.push([prev, current]);
@@ -10151,4 +10142,5 @@ console.log("\n ========== merge6: ", merge(intervals6)); // [[1,4],[5,6]]
 console.log("\n ========== merge7: ", merge(intervals7)); // [[0,5]]
 console.log("\n ========== merge8: ", merge(intervals8)); // [[1,3],[4,7]]
 console.log("\n ========== merge9: ", merge(intervals9)); // [[0,3],[4,7]]
-console.log("\n ========== merge10: ", merge(intervals10)); // [[0,3],[4,7]]
+/* console.log("\n ========== merge10: ", merge(intervals10)); // [[0,3],[4,7]]
+ */
