@@ -1,54 +1,129 @@
 function merge(intervals: number[][]): number[][] {
-  const fillRange = (start: number, end: number) =>
-    Array.from({ length: end - start + 1 }, (_, index) => start + index);
-
-  const flat: number[] = [];
-
-  const edgesMap = new Map();
-
-  intervals.forEach((item: number[], index: number) => {
-    edgesMap.set(item[0], {
-      max: false,
-      min: true,
-    });
-    edgesMap.set(item[1], {
-      max: true,
-      min: false,
-    });
-    flat.push(...fillRange(item[0] as number, item[1] as number));
-  });
-  const sorted: number[] = [...new Set(flat)].sort((a: number, b: number) =>
-    a > b ? 1 : -1,
-  );
-
   const merged: number[][] = [];
-  let start: number = 0;
-  console.log(sorted);
-  console.log(edgesMap);
+  const sorted: number[][] = intervals.sort((a: number[], b: number[]) =>
+    a[0] > b[0] ? 1 : -1,
+  );
+  /*   console.log(sorted)
+   */
+  const mergeMap = new Map();
+  const startflat = sorted.flat();
+  
+  function checkMerge(flat: number[]) {
+    console.log("NEWFLAT: ", flat);
+    console.log("NEWMERGE: ", merged);
+    for (let i = 0; i < flat.length; i++) {
+      
+      let parity = i % 2;
+      const current = flat[i] as number;
+      const isNext = typeof flat[i + 1] !== "undefined" ? true : false;
+      const isPrev = typeof flat[i - 1] !== "undefined" ? true : false;
+      const isNextEdge = typeof flat[i + 1] !== "undefined" ? true : false;
+      const next =
+        typeof flat[i + 1] !== "undefined" ? (flat[i + 1] as number) : null;
+      const prev =
+        typeof flat[i - 1] !== "undefined" ? (flat[i - 1] as number) : null;
+      const nextEdge =
+        typeof flat[i + 2] !== "undefined" ? (flat[i + 2] as number) : null;
+      const isEdge = parity !== 0;
 
-  for (let i = 0; i < sorted.length; i++) {
-    if (sorted[i] && sorted[i + 1]) {
-      const leftEdge = edgesMap.has(sorted[i]) ? edgesMap.get(sorted[i]).max : false;
-      const rightEdge = edgesMap.has(sorted[i + 1]) ? edgesMap.get(sorted[i + 1]).min : false;
-      const isEdge = leftEdge && rightEdge;
-      const isSiblings = (sorted[i + 1] as number) - (sorted[i] as number) > 1;
+      // если ранее не использован
+      if (!mergeMap.has(i)) {
+        // если не последний
+        if (isNext) {
+          if (isNextEdge) {
+            if (current === next && !isEdge && next < nextEdge) {
+              merged.push([current, next]);
+              mergeMap.set(i, true);
+              mergeMap.set(i + 1, true);
+            }
+          }
 
-      console.log(i, sorted[i], sorted[i + 1], isEdge, isSiblings);
+          // если не последний и не первый, и нечетный т.е. правая граница
+          if (isPrev) {
+            // если текущий можно слить со следующим
+            if (current >= next && isEdge) {
+              mergeMap.set(i, true);
+              mergeMap.set(i + 1, true);
+              mergeMap.set(i + 2, true);
 
-      if (i < sorted.length - 1 && (isSiblings || isEdge)) {
-        merged.push([sorted[start] as number, sorted[i] as number]);
-        start = i + 1;
-      }
-    } else {
-      if (sorted[i] !== sorted[start]) {
-      merged.push([sorted[start] as number, sorted[i] as number]);
-
+              const newArr = [...flat.filter((el, index) => index > i + 2)];
+              if (nextEdge >= current) {
+                merged.push([prev, nextEdge]);
+                checkMerge([...merged.flat(), ...newArr]);
+                break;
+              } else {
+                merged.push([prev, current]);
+                checkMerge([...merged.flat(), ...newArr]);
+                break;
+              }
+            } else {
+              if (isEdge && current < next) {
+                merged.push([prev, current]);
+                mergeMap.set(i, true);
+                mergeMap.set(i + 1, true);
+                continue;
+              }
+              if (1) {
+                merged.push([current, next]);
+                mergeMap.set(i, true);
+                mergeMap.set(i + 1, true);
+                continue;
+              }
+            }
+          }
+          //
+        } else {
+          if (isPrev) {
+            merged.push([prev, current]);
+            mergeMap.set(i, true);
+            continue;
+          }
+        }
       }
     }
   }
+
+  checkMerge(startflat);
+
   return merged;
 }
 
-const intervals = [[1,4],[0,0]]
+const intervals1 = [
+  [1, 4],
+  [0, 0],
+];
+const intervals2 = [
+  [1, 3],
+  [2, 6],
+  [8, 10],
+  [15, 18],
+];
+const intervals3 = [
+  [1, 4],
+  [4, 5],
+];
+const intervals4 = [
+  [4, 7],
+  [1, 4],
+];
+const intervals5 = [
+  [1, 4],
+  [1, 5],
+];
+const intervals6 = [
+  [1, 4],
+  [5, 6],
+];
+const intervals7 = [
+  [1, 4],
+  [0, 2],
+  [3, 5],
+];
 
-console.log(merge(intervals)); // [[0,0],[1,4]]
+console.log("\nmerge: ", merge(intervals1)); // [[0,0],[1,4]]
+console.log("\nmerge: ", merge(intervals2)); // [[1,6],[8,10],[15,18]]
+console.log("\nmerge: ", merge(intervals3)); // [[1,5]]
+console.log("\nmerge: ", merge(intervals4)); // [[1,7]]
+console.log("\nmerge: ", merge(intervals5)); // [[1,5]]
+console.log("\nmerge: ", merge(intervals6)); // [[1,4],[5,6]]
+console.log("\nmerge: ", merge(intervals7)); // [[0,5]]
