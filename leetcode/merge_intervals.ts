@@ -49,6 +49,6 @@ function merge(intervals: number[][]): number[][] {
   return merged;
 }
 
-const intervals = [[1,4],[0,4]]
+const intervals = [[1,4],[0,0]]
 
-console.log(merge(intervals)); // [[0,4]]
+console.log(merge(intervals)); // [[0,0],[1,4]]
