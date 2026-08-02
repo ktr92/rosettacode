@@ -1,65 +1,25 @@
 function merge(intervals: number[][]): number[][] {
-  const mergeMap = new Map();
-  const startflat = intervals.sort((a: number[], b: number[]) => (a[0] >= b[0] ? 1 : -1)).flat();
-
-  function checkMerge(flat: number[]) {
-    let i = 0;
-    while (i < flat.length) {
-      let parity = i % 2;
-      const current = flat[i] as number;
-      const isNext = typeof flat[i + 1] !== "undefined" ? true : false;
-      const isPrev = typeof flat[i - 1] !== "undefined" ? true : false;
-      const isNextEdge = typeof flat[i + 2] !== "undefined" ? true : false;
-      const next = isNext ? (flat[i + 1] as number) : null;
-      const prev = isPrev ? (flat[i - 1] as number) : null;
-      const nextEdge = isNextEdge ? (flat[i + 2] as number) : null;
-      const isEdge = parity !== 0;
-      const nextIndex = isNext ? i + 1 : 0;
-      const prevIndex = isPrev ? i - 1 : 0;
-
-      if (!mergeMap.has(i)) {
-        if (isNext) {
-          if (isNextEdge && typeof nextEdge === "number") {
-            if (current === next && !isEdge && next < nextEdge) {
-              mergeMap.set(i, true);
-              mergeMap.set(nextIndex, true);
-            }
-          }
-          if (isPrev) {
-            if (
-              typeof next === "number" &&
-              typeof nextEdge === "number" &&
-              typeof prev === "number"
-            ) {
-              if (current >= next && isEdge) {
-                if (nextEdge >= current) {
-                  flat.splice(prevIndex, 4, prev, nextEdge);
-                } else {
-                  flat.splice(prevIndex, 4, prev, current);
-                }
-                mergeMap.set(prevIndex, true);
-                i = prevIndex;
-              }
-            }
-          }
-        } else {
-          if (isPrev && typeof prev === "number") {
-            mergeMap.set(i, true);
-          }
-        }
+  intervals.sort((a: number[], b: number[]) => (a[0] >= b[0] ? 1 : -1));
+  let i = 0;
+  while (i < intervals.length - 1) {
+    const ep = {
+      prev: intervals[i][0],
+      value: intervals[i][1],
+      next: intervals[i + 1][0],
+      nextEdge: intervals[i + 1][1],
+    };
+    if (ep.value >= ep.next) {
+      if (ep.nextEdge >= ep.value) {
+        intervals.splice(i, 2, [ep.prev, ep.nextEdge]);
+      } else {
+        intervals.splice(i, 2, [ep.prev, ep.value]);
       }
+    } else {
       i++;
     }
   }
-
-  checkMerge(startflat);
-  console.log(startflat)
-  const result = [];
-  for (let i = 0; i < startflat.length; i += 2) {
-    result.push(startflat.slice(i, i + 2));
-  }
-
-  return result;
+  console.log(intervals)
+  return intervals;
 }
 
 const intervals1 = [
@@ -10115,16 +10075,16 @@ const intervals10 = [
 ];
 const start = performance.now();
 
-console.log("\n ========== merge1: ", merge(intervals1)); // [[0,0],[1,4]]
-console.log("\n ========== merge2: ", merge(intervals2)); // [[1,6],[8,10],[15,18]]
-console.log("\n ========== merge3: ", merge(intervals3)); // [[1,5]]
-console.log("\n ========== merge4: ", merge(intervals4)); // [[1,7]]
-console.log("\n ========== merge5: ", merge(intervals5)); // [[1,5]]
-console.log("\n ========== merge6: ", merge(intervals6)); // [[1,4],[5,6]]
-console.log("\n ========== merge7: ", merge(intervals7)); // [[0,5]]
-console.log("\n ========== merge8: ", merge(intervals8)); // [[1,3],[4,7]]
-console.log("\n ========== merge9: ", merge(intervals9)); // [[0,3],[4,7]]
-console.log("\n ========== merge10: ", merge(intervals10)); // [[0,3],[4,7]]
+merge(intervals1) // [[0,0],[1,4]]
+merge(intervals2); // [[1,6],[8,10],[15,18]]
+merge(intervals3); // [[1,5]]
+merge(intervals4); // [[1,7]]
+merge(intervals5); // [[1,5]]
+merge(intervals6); // [[1,4],[5,6]]
+merge(intervals7); // [[0,5]]
+merge(intervals8); // [[1,3],[4,7]]
+merge(intervals9); // [[0,3],[4,7]]
+merge(intervals10); // [[0,3],[4,7]]
 const end = performance.now();
 const duration = end - start;
 console.log(`Execution speed: ${duration.toFixed(4)} ms`);
