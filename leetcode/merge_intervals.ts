@@ -18,7 +18,7 @@ function merge(intervals: number[][]): number[][] {
       i++;
     }
   }
-  console.log(intervals)
+  //console.log(intervals)
   return intervals;
 }
 
