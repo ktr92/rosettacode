@@ -4,7 +4,7 @@
   "description": "",
   "main": "24game.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --testPathPatterns=tests/run"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,13 @@
   },
   "homepage": "https://github.com/ktr92/rosettacode#readme",
   "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
+    "@babel/preset-typescript": "^8.0.1",
+    "@jest/globals": "^30.4.1",
+    "@types/node": "^26.1.2",
+    "babel-jest": "^30.4.1",
+    "jest": "^30.4.2",
     "typescript": "^7.0.2"
   }
 }
