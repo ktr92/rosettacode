@@ -9,9 +9,21 @@ function romanToInt(s: string): number {
     ["M", 1000],
   ]);
 
-  
+  let val = 0;
+  for (let i = 0; i < s.length; i++) {
 
-  return 3;
+    const roman_i = symbolsMap.get(s[i]);
+    const roman_i_1 = symbolsMap.get(s[i + 1]) || 0;
+
+    
+    if (roman_i_1 <= roman_i) {
+      val += roman_i
+    } else {
+      val += -roman_i
+    }
+
+  }
+  return val;
 }
 
 module.exports = romanToInt;
