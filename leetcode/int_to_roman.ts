@@ -49,15 +49,15 @@ function intToRoman(num: number): string {
     } else {
       if (item > 1000) {
         val += consecutiveForm(item, 1000);
-      } else if (item >= 500 && item !== 900) {
+      } else if (item >= 500) {
         val += substractiveForm(item, 100, 500);
-      } else if (item >= 100 && item !== 400) {
+      } else if (item >= 100) {
         val += consecutiveForm(item, 100);
-      } else if (item >= 50 && item !== 90) {
+      } else if (item >= 50) {
         val += substractiveForm(item, 10, 50);
-      } else if (item >= 10 && item !== 40) {
+      } else if (item >= 10) {
         val += consecutiveForm(item, 10);
-      } else if (item >= 5 && item !== 9) {
+      } else if (item >= 5) {
         val += substractiveForm(item, 1, 5)
       } else {
         val += consecutiveForm(item, 1)
