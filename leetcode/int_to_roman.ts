@@ -23,10 +23,8 @@ function intToRoman(num: number): string {
   let val = "";
   const consecutiveForm = (num: number, range: number) => {
     let result = "";
-    const del = num / range;
-    const sym = symbolsMap.get(range);
-    for (let k = 0; k < del; k++) {
-      result += sym;
+    for (let k = 0; k < num / range; k++) {
+      result += symbolsMap.get(range);
     }
     return result;
   };
@@ -34,8 +32,7 @@ function intToRoman(num: number): string {
     let result = symbolsMap.get(substtact);
     const diff = num - substtact;
     if (diff) {
-      const del = diff / range;
-      for (let k = 0; k < del; k++) {
+      for (let k = 0; k < diff / range; k++) {
         result += symbolsMap.get(range);
       }
     }
