@@ -41,8 +41,9 @@ function intToRoman(num: number): string {
 
   for (let i = 0; i < arrnum.length; i++) {
     const item = arrnum[i];
-    if (symbolsMap.has(item)) {
-      val += symbolsMap.get(item);
+    const mapped = symbolsMap.get(item)
+    if (mapped) {
+      val += mapped;
     } else {
       if (item > 1000) {
         val += consecutiveForm(item, 1000);
