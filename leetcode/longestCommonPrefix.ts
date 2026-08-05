@@ -20,5 +20,4 @@ function longestCommonPrefix(strs: string[]): string {
   // "fl"
   return common;
 }
-longestCommonPrefix(["flower", "flow", "flight"]);
 module.exports = longestCommonPrefix;
