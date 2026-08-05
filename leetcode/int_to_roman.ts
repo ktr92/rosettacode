@@ -15,19 +15,12 @@ function intToRoman(num: number): string {
     [1000, "M"],
   ]);
 
-  const arrnum = num.toString().split("");
+  const arrnum = num.toString().split("").map((_, i, arr) => {
+     return Number(arr[arr.length - 1 - i]) * (i > 0 ? Math.pow(10, i) : 1); 
+  }).reverse();
+
 
   let val = "";
-  let summ = [];
-  console.log(arrnum);
-  for (let i = 0; i < arrnum.length; i++) {
-    if (i > 0) {
-      summ.unshift(Number(arrnum[arrnum.length - 1 - i]) * Math.pow(10, i));
-    } else {
-      summ.unshift(Number(arrnum[arrnum.length - 1 - i]));
-    }
-  }
-
   const consecutiveForm = (num: number, range: number) => {
     let result = "";
     const del = num / range;
@@ -49,29 +42,30 @@ function intToRoman(num: number): string {
     return result;
   };
 
-  for (let i = 0; i < summ.length; i++) {
-    if (symbolsMap.has(summ[i])) {
-      val += symbolsMap.get(summ[i]);
+  for (let i = 0; i < arrnum.length; i++) {
+    const item = arrnum[i];
+    if (symbolsMap.has(item)) {
+      val += symbolsMap.get(item);
     } else {
-      if (summ[i] > 1000) {
-        val += consecutiveForm(summ[i], 1000);
-      } else if (summ[i] >= 500 && summ[i] !== 900) {
-        val += substractiveForm(summ[i], 100, 500);
-      } else if (summ[i] >= 100 && summ[i] !== 400) {
-        val += consecutiveForm(summ[i], 100);
-      } else if (summ[i] >= 50 && summ[i] !== 90) {
-        val += substractiveForm(summ[i], 10, 50);
-      } else if (summ[i] >= 10 && summ[i] !== 40) {
-        val += consecutiveForm(summ[i], 10);
-      } else if (summ[i] >= 5 && summ[i] !== 9) {
-        val += substractiveForm(summ[i], 1, 5)
+      if (item > 1000) {
+        val += consecutiveForm(item, 1000);
+      } else if (item >= 500 && item !== 900) {
+        val += substractiveForm(item, 100, 500);
+      } else if (item >= 100 && item !== 400) {
+        val += consecutiveForm(item, 100);
+      } else if (item >= 50 && item !== 90) {
+        val += substractiveForm(item, 10, 50);
+      } else if (item >= 10 && item !== 40) {
+        val += consecutiveForm(item, 10);
+      } else if (item >= 5 && item !== 9) {
+        val += substractiveForm(item, 1, 5)
       } else {
-        val += consecutiveForm(summ[i], 1)
+        val += consecutiveForm(item, 1)
       }
     }
   }
   return val;
 }
-intToRoman(3749);
+
 
 module.exports = intToRoman;
