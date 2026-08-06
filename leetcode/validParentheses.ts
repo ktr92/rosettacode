@@ -22,7 +22,7 @@ function validParentheses(s: string): boolean {
      if (mapVal) {
       stack.unshift(val)
      } else {
-      if (stack[0] && parenthesesMap.get(stack[0])?.closeby !== val) {
+      if (!stack[0] || parenthesesMap.get(stack[0])?.closeby !== val) {
        return false
       } else {
        stack.shift()
