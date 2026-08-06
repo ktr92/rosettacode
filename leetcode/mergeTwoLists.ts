@@ -1,3 +1,51 @@
+class ListNode {
+  val: number;
+  next: ListNode | null;
+  constructor(val?: number, next?: ListNode | null) {
+    this.val = val === undefined ? 0 : val;
+    this.next = next === undefined ? null : next;
+  }
+}
+
+function endFirst(first: ListNode, second: ListNode) {
+  second.next = first;
+  return second;
+}
+
+function firstToSecond(first: ListNode, second: ListNode) {
+  const next1 = first?.next;
+  const next2 = second?.next;
+  first.next = second;
+  first.next.next = mergeTwoLists(next1, next2);
+}
+
+function firstToNext(first: ListNode, second: ListNode) {
+  first.next = mergeTwoLists(first?.next, second);
+}
+
+function appendingToFirst(first: ListNode, second: ListNode) {
+  if (second.next) {
+    if (first.next) {
+      if (second.val <= first.next.val) {
+        firstToSecond(first, second);
+      } else {
+        firstToNext(first, second);
+      }
+    } else {
+      return endFirst(second, first);
+    }
+  } else {
+    if (!first.next) {
+      return endFirst(second, first);
+    } else {
+      const next1 = second;
+      const next2 = first.next;
+      first.next = mergeTwoLists(next1, next2);
+    }
+  }
+  return first;
+}
+
 function mergeTwoLists(
   list1: ListNode | null,
   list2: ListNode | null,
@@ -8,61 +56,9 @@ function mergeTwoLists(
   if (!list1) {
     return list2 ? list2 : null;
   }
-
   if (list1.val <= list2.val) {
-    if (list2.next) {
-      if (list1.next) {
-        if (list2.val <= list1.next.val) {
-          const next1 = list1?.next;
-          const next2 = list2?.next;
-          list1.next = list2;
-          list1.next.next = mergeTwoLists(next1, next2);
-        } else {
-          const next1 = list1?.next;
-          const next2 = list2;
-          list1.next = mergeTwoLists(next1, next2);
-        }
-      } else {
-        list1.next = list2;
-        return list1;
-      }
-    } else {
-      if (!list1.next) {
-        list1.next = list2;
-        return list1;
-      } else {
-        const next1 = list2;
-        const next2 = list1.next;
-        list1.next = mergeTwoLists(next1, next2);
-      }
-    }
-    return list1;
+    return appendingToFirst(list1, list2);
   } else {
-    if (list1.next) {
-      if (list2.next) {
-        if (list2.val <= list2.next.val) {
-          const next1 = list2?.next;
-          const next2 = list1;
-          list2.next = mergeTwoLists(next1, next2);
-        } else {
-          const next1 = list2?.next;
-          const next2 = list1;
-          list2.next = mergeTwoLists(next1, next2);
-        }
-      } else {
-        list2.next = list1;
-        return list2;
-      }
-    } else {
-      if (!list2.next) {
-        list2.next = list1;
-        return list2;
-      } else {
-        const next1 = list1;
-        const next2 = list2.next;
-        list2.next = mergeTwoLists(next1, next2);
-      }
-    }
-    return list2;
+    return appendingToFirst(list2, list1);
   }
 }
