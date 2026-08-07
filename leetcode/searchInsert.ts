@@ -1,36 +1,23 @@
 function searchInsert(nums: number[], target: number): number {
-  let len = nums.length;
-  let start = Math.floor(len / 2);
-  let k = 1;
+  let end = nums.length - 1;
+  let start = 0;
+  let mid = 0;
 
-  while (len >= 1) {
-    if (target === nums[start]) {
-      return start;
-    } else {
-      if (target === nums[start + 1]) {
-        return start + 1;
-      } else if (target === nums[start - 1]) {
-        return start - 1;
-      }
-    }
+  while (start <= end) {
+    if (target > nums[end]) return end + 1;
+    if (target < nums[0]) return 0;
 
-    if (target > nums[start] && target < nums[start + 1] ) {
-      return start + 1;
-    }
-    if (target > nums[start - 1] && target < nums[start] ) {
-      return start;
-    }
-    len = Math.floor(len / 2);
-    if (target > nums[start]) {
-      start = nums.length - len;
+    mid = start + Math.floor((end - start) / 2);
+    const midVal = nums[mid];
+
+    if (target > midVal) {
+      start = mid + 1;
     } else {
-      start = len;
+      end = mid - 1;
     }
-    
-    k++;
+   
   }
-
-  return start;
+  return mid;
 }
 
 module.exports = searchInsert;
