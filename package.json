@@ -4,7 +4,7 @@
   "description": "",
   "main": "24game.js",
   "scripts": {
-    "test": "jest --testPathPatterns=tests/run"
+    "test": "jest --testPathPatterns=tests/run --noStackTrace"
   },
   "repository": {
     "type": "git",
