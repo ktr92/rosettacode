@@ -20,25 +20,29 @@ function getNext(first: ListNode | null, second: ListNode | null) {
   return first;
 }
 
-function summNext(l1, l2, result) {
-  let first = l1 as ListNode;
-  let second = l2 as ListNode;
-  let summ = first.val;
-  if (second) {
-    summ += second.val;
+function summNext(result: ListNode, l1: ListNode | null, l2?: ListNode | null) {
+  if (!l1) {
+    result = null
+    return ;
   }
-  result.next = new ListNode(0, null);
+  let summ = l1.val;
+  if (l2) {
+    summ += l2.val;
+  }
+  
   result.val += summ - 10 >= 0 ? summ - 10 : summ;
+  result.next = new ListNode(0, null);
   result.next.val = summ - 10 >= 0 ? 1 : 0;
-  current = result.next;
-  console.log("result: ", JSON.stringify(result));
-
-  if (!l1.next) {
-    console.log("result: ", JSON.stringify(result));
-    return result;
+  const nextNode = getNext(l1, l2) ? l1 : l2;
+  if (nextNode?.next) {
+    if (l2?.next) {
+      summNext(result.next, nextNode.next, l2.next);
+    } else {
+      summNext(result.next, nextNode.next);
+    }
+  } else {
+    result.next = null
   }
-
-  result.next = summNext(l1.next, l2.next, result);
 }
 
 function addTwoNumbers(
@@ -46,7 +50,10 @@ function addTwoNumbers(
   l2: ListNode | null,
 ): ListNode | null {
   let result = new ListNode(0, null);
-  return summNext(l1, l2, result);
+  summNext(result, l1, l2);
+  console.log("result: ", result);
+
+  return result;
 }
 
 module.exports = addTwoNumbers;
