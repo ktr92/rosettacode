@@ -1,28 +1,18 @@
 function lengthOfLongestSubstring(s: string): number {
-  let unique: string[] = [];
-
-  const arr: string[] = s.split("");
-  const hashMap = new Map();
-  let tmp: string[] = [];
-  for (let j = 0; j < arr.length; j++) {
-    if (!hashMap.has(arr[j])) {
-      tmp.push(arr[j] as string);
-      hashMap.set(arr[j], j);
-    } else {
-      if (tmp.length > unique.length) {
-        unique = [...tmp];
-      }
-      j = hashMap.get(arr[j]);
-      hashMap.clear();
-      tmp.length = 0;
+  const hashMap = new Map<string, number>();
+  let left = 0;
+  let size = 0;
+  for (let right = 0; right < s.length; right++) {
+    const item = s[right];
+    const index = hashMap.get(item);
+    if (index >= left) {
+      left = index + 1;
     }
+    hashMap.set(item, right);
+     const newSize = right - left + 1;
+    size = newSize > size ? newSize : size;
   }
-
-  if (tmp.length > unique.length) {
-    return tmp.length;
-  } else {
-    return unique.length;
-  }
+  return size;
 }
 
 module.exports = lengthOfLongestSubstring;

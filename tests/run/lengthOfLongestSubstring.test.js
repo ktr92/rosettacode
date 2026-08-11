@@ -20,4 +20,7 @@ test('eea', () => {
 test('1R1T7', () => {
   expect(lengthOfLongestSubstring("1R1T7")).toBe(4);
 });
+test('ccbbcc', () => {
+  expect(lengthOfLongestSubstring("ccbbcc")).toBe(2);
+});
 
