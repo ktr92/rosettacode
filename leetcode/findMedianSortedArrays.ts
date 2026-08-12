@@ -17,6 +17,7 @@ function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
   let k2 = 0;
   let head = new ListNode(0, null);
 
+
   const getMiddle = (arr: number[]) => {
     if (arr.length % 2 === 0) {
       return (arr[arr.length / 2] + arr[arr.length / 2 - 1]) / 2;
@@ -40,25 +41,27 @@ function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
   let min = -Infinity;
 
   const nextNode = (node: ListNode, prev?: number | null) => {
+
     let min1 = nums1[k1];
     let min2 = nums2[k2];
-
-  /*   if (k1 >= nums1.length) {
+    if (k1 >= nums1.length) {
       min = min2;
-    } else {
-      if (k2 >= nums2.length) {
-        min = min1;
-      } else { */
-        if (min1 <= min2) {
-          min = min1;
-          k1++;
-        } else {
-          min = min2;
-          k2++;
-        }
-   /*    }
+      k2++
     }
- */
+    if (k2 >= nums2.length) {
+      min = min1;
+      k1++
+    }
+    if (typeof min1 !== "undefined" && typeof min2 !== "undefined") {
+      if (min1 <= min2) {
+        min = min1;
+        k1++;
+      } else {
+        min = min2;
+        k2++;
+      }
+    }
+
     node.val = min;
     node.next = new ListNode(0, null);
 
@@ -67,6 +70,7 @@ function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
         return (node.val + prev) / 2;
       } else {
         prev = node.val;
+        index++;
         return nextNode(node.next, prev);
       }
     }
