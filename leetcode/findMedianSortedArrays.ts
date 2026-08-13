@@ -1,11 +1,30 @@
 function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
-  let first = [0, nums1.length - 1];
-  let second = [0, nums2.length - 1];
-
-  function getMid([start, end]: number[]) {
-    if (start - end === 0) return 0;
-    return start + Math.floor((end - start) / 2);
+  class ListNode {
+    val: number;
+    next: ListNode | null;
+    constructor(val?: number, next?: ListNode | null) {
+      this.val = val === undefined ? 0 : val;
+      this.next = next === undefined ? null : next;
+    }
   }
+
+  let index = 0;
+  const totalLength = nums1.length + nums2.length;
+  const isEven = totalLength % 2 === 0;
+  let targetindex = isEven ? totalLength / 2 - 1 : Math.floor(totalLength / 2);
+
+  let k1 = 0;
+  let k2 = 0;
+  let head = new ListNode(0, null);
+
+
+  const getMiddle = (arr: number[]) => {
+    if (arr.length % 2 === 0) {
+      return (arr[arr.length / 2] + arr[arr.length / 2 - 1]) / 2;
+    } else {
+      return arr[Math.floor(arr.length / 2)];
+    }
+  };
 
   if (nums1.length === 1 && nums2.length === 1) {
     return (nums1[0] + nums2[0]) / 2;
@@ -13,97 +32,55 @@ function findMedianSortedArrays(nums1: number[], nums2: number[]): number {
 
   if (!nums1.length) {
     if (nums2.length < 2) return nums2[0];
-    return getMid(nums2);
+    return getMiddle(nums2);
   }
   if (!nums2.length) {
     if (nums1.length < 2) return nums1[0];
-    return getMid(nums1);
+    return getMiddle(nums1);
   }
+  let min = -Infinity;
 
-  function getMedian(arr: number[], mid, [start, end]) {
-    return (start - end + 1) % 2 === 0
-      ? (arr[mid] + arr[mid + 1]) / 2
-      : arr[mid];
-  }
+  const nextNode = (node: ListNode, prev?: number | null) => {
 
-  let i = 0;
-  let prev1 = 0;
-  let prev2 = 0;
-  let mid1 = getMid(first);
-  let mid2 = getMid(second);
-  let median1 = getMedian(nums1, mid1, first);
-  let median2 = getMedian(nums2, mid2, second);
-
-  function initMiddles(nums1, nums2, mid1, mid2, first, second) {
-    mid1 = getMid(first);
-    median1 = getMedian(nums1, mid1, first);
-
-    mid2 = getMid(second);
-    median2 = getMedian(nums2, mid2, second);
-  }
-
-  function hasTwo(pointer) {
-    return Math.abs(pointer[1] - pointer[0]) === 1;
-  }
-  function hasMany(pointer) {
-    return !hasOne(pointer) && !hasTwo(pointer);
-  }
-  function hasOne(pointer) {
-    return pointer[1] - pointer[0] === 0;
-  }
-
-  do {
-    prev1 = mid1;
-    prev2 = mid2;
-    if (median2 >= median1) {
-      if (hasMany(first) && hasMany(second)) {
-        first = [mid1 + 1, nums1.length - 1];
-        second = [0, mid2];
-      }
-      if (hasTwo(second)) {
-        if (hasTwo(first)) {
-          first = [mid1 + 1, nums1.length - 1];
-          second = [0, mid2];
-        } else {
-          second = [0, mid2];
-        }
-      }
-    } else {
-      if (hasMany(first) && hasMany(second)) {
-        first = [prev1 + 1, mid1 > prev1 + 1 ? mid1 : prev1 + 1];
-        second = [mid2, prev2 > mid2 ? prev2 : mid2];
-      }
-      if (hasTwo(first)) {
-        if (hasTwo(second)) {
-          first = [prev1 + 1, mid1 > prev1 + 1 ? mid1 : prev1 + 1];
-          second = [mid2, prev2 > mid2 ? prev2 : mid2];
-        } else {
-          first = [prev1 + 1, mid1 > prev1 + 1 ? mid1 : prev1 + 1];
-        }
-      }
+    let min1 = nums1[k1];
+    let min2 = nums2[k2];
+    if (k1 >= nums1.length) {
+      min = min2;
+      k2++
     }
-
-    console.log(first, second);
-
-    if (!hasOne(first)) {
-      if (!hasOne(second)) {
-        if (first[0] <= second[0]) {
-          initMiddles(nums1, nums2, mid1, mid2, first, second);
-        }
+    if (k2 >= nums2.length) {
+      min = min1;
+      k1++
+    }
+    if (typeof min1 !== "undefined" && typeof min2 !== "undefined") {
+      if (min1 <= min2) {
+        min = min1;
+        k1++;
       } else {
-        initMiddles(nums1, nums2, mid1, mid2, first, second);
-        mid2 = 0;
-        median2 = nums2[second[0]];
+        min = min2;
+        k2++;
       }
-    } else {
-      initMiddles(nums1, nums2, mid1, mid2, first, second);
-      mid1 = 0;
-      median1 = nums1[first[1]];
     }
-    i++;
-  } while (hasTwo(first) && hasTwo(second));
 
-  return (median2 + median1) / 2;
+    node.val = min;
+    node.next = new ListNode(0, null);
+
+    if (isEven && index >= targetindex) {
+      if (typeof prev === "number") {
+        return (node.val + prev) / 2;
+      } else {
+        prev = node.val;
+        index++;
+        return nextNode(node.next, prev);
+      }
+    }
+    if (!isEven && index >= targetindex) return node.val;
+
+    index++;
+    return nextNode(node.next);
+  };
+
+  return nextNode(head);
 }
 
-module.exports = findMedianSortedArrays;
+module.exports = findMedianSortedArrays
