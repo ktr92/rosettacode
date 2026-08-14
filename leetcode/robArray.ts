@@ -1,5 +1,6 @@
 function rob(nums: number[]): number {
-  
+
+  if (nums.length < 2) return nums[0]
 
   let skip = nums[0] > nums[1] ? 1 : 0;
   let last = nums[0] > nums[1] ? 0 : 1;
@@ -8,13 +9,17 @@ function rob(nums: number[]): number {
   let prev = 0
   let summ = nums[last];
 
-  for (let i = 2; i < nums.length; i++) {
+  if (nums.length > 2) {
+   for (let i = 2; i < nums.length; i++) {
 
     skipValue = typeof skip === 'number' ? nums[skip] : 0;
 
     if (skip > last) {
+     skip = last;
      last = i;
      summ += nums[i];
+     skipValue = nums[i]
+     prev = nums[last - 2]
      continue;
     }
    
@@ -29,9 +34,11 @@ function rob(nums: number[]): number {
       skipValue = nums[i]
     }
    
-      console.log('skip: ', skip, ' last: ', last, ' summ: ', summ)
 
   }
+  }
+
+  
   return summ;
 }
 
