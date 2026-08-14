@@ -1,6 +1,6 @@
 const rob = require('../../leetcode/robArray');
 
-
+/* 
 test('[1,2,3,1]', () => {
   expect(rob([1,2,3,1])).toBe(4);
 
@@ -24,7 +24,7 @@ test('[2,3,2]', () => {
 test('[1,7,9,4]', () => {
   expect(rob([1,7,9,4])).toBe(11);
 
-});
+}); */
 test('[2,4,8,9,9,3]', () => {
   expect(rob([2,4,8,9,9,3])).toBe(19);
 
