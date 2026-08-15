@@ -22,7 +22,6 @@ function rob(nums: number[]): number {
       if (skip > last) {
         summ += nums[i];
         changeLast(i);
-
         continue;
       }
 
@@ -33,12 +32,9 @@ function rob(nums: number[]): number {
         skip = i;
         skipValue = nums[i];
       }
-            console.log('skip: ', skip, ' last: ', last, ' summ: ', summ)
-
     }
   }
 
   return summ;
 }
-
 module.exports = rob;
