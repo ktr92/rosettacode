@@ -1,40 +1,20 @@
 function rob(nums: number[]): number {
   if (nums.length < 2) return nums[0];
-
-  let skip = nums[0] > nums[1] ? 1 : 0;
-  let last = nums[0] > nums[1] ? 0 : 1;
-
-  let skipValue = nums[skip];
-  let prev = 0;
-  let summ = nums[last];
-
-  function changeLast(i) {
-    skip = last;
-    last = i;
-    skipValue = nums[i];
-    prev = nums[last - 2];
-  }
+  const dp = []
+  dp[0] = nums[0]
+  dp[1] = nums[1]
 
   if (nums.length > 2) {
     for (let i = 2; i < nums.length; i++) {
-      skipValue = typeof skip === "number" ? nums[skip] : 0;
+      dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i]);
 
-      if (skip > last) {
-        summ += nums[i];
-        changeLast(i);
-        continue;
-      }
-
-      if (nums[i] + skipValue > nums[last] + prev) {
-        summ += nums[i] - nums[last] + skipValue - prev;
-        changeLast(i);
-      } else {
-        skip = i;
-        skipValue = nums[i];
+      if (i >= 3) {
+        dp[i] = Math.max(dp[i], dp[i-3] + nums[i]);
       }
     }
+  } else {
+    dp[nums.length - 1] = Math.max(dp[1], dp[0]);
   }
-
-  return summ;
+  return dp[nums.length - 1];
 }
 module.exports = rob;
