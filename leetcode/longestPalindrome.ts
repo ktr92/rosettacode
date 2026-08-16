@@ -1,28 +1,29 @@
 function longestPalindrome(s: string): string {
-  const arr = s.split("");
-  let result = "";
+  
+  const dp: boolean[][] = [[]];
 
-  const check_Palindrome = (str: string) => {
-    const rev = str.split("").reverse();
-    return str.split("").every((v, i) => v === rev[i]);
-  };
+  for (let i = 0; i < s.length; i++) {
+    for (let j = 0; j < i; j++) {
+      // i начало подстроки
+      // конец подстроки
+      if (i === j) dp[i][j] = true;
+      
+      // два символа подряд
+      if (s[i+1] && s[i] === s[i+1]) {
+        dp[i][i+1] = true
+      }
 
-  const getNext = (n: number, limit: number, level: number) => {
-    for (let index = n; index < limit; index++) {
-      const newlimit = index + level;
-      const tmp = [];
-      tmp.push(arr[index - level], arr[index], arr[index + level]);
-
-      if (check_Palindrome(tmp.join(""))) {
-        getNext(index, newlimit, 3);
-        result = tmp.join("");
+      if (s[i+1] && s[i] === s[j]) {
+        dp[i][j] = dp[i+1][j-1]
+      } else {
+        dp[i][j] = false
       }
     }
-  };
+  }
+  
+  console.log(dp)
 
-  getNext(0, arr.length, 3);
-
-  return result;
+  return 1;
 }
 
 module.exports = longestPalindrome;
