@@ -1,5 +1,5 @@
 function maximalSquare(matrix: string[][]): number {
-  const dp: number[] = Array(matrix[0]?.length).fill(0);
+  const dp: number[][] = [];
   // dp[i][j] - размер квадрата, у которого i,j - нижний правый угол
   // maxrix[i][j] = 0 => dp[i][j] = 0;
   // matrix[i][j] = 1 => dp[i][j] = 1;
@@ -7,11 +7,10 @@ function maximalSquare(matrix: string[][]): number {
   // dp[0][j] = 0;
   // dp[i][0] = 0;
   let max = 0;
-  let prev = Number(matrix[0][0]);
-
   for (let i = 0; i < matrix.length; i++) {
+    dp[i] = [];
     for (let j = 0; j < (matrix[i] as string[]).length; j++) {
-      prev = dp[j]
+     
       if (i > 0 && j > 0) {
         if (matrix[i][j] === "1") {
           if (
@@ -19,19 +18,19 @@ function maximalSquare(matrix: string[][]): number {
             matrix[i][j - 1] === "1" &&
             matrix[i - 1][j] === "1"
           ) {
-            
-            dp[j] = Math.min(dp[j-1] || 0, dp[j] || 0, prev) + 1;
-            continue;
-          } 
+            dp[i][j] = Math.min(dp[i - 1][j - 1], dp[i][j - 1], dp[i - 1][j]) + 1;
+          } else {
+            dp[i][j] = 1;
+          }
+        } else {
+          dp[i][j] = 0;
         }
+      } else {
+       dp[i][j] = Number(matrix[i][j])
       }
-      dp[j] = Number(matrix[i][j]);
-      
     }
-    let stepMax = Math.max(prev, ...dp);
-    max = stepMax > max ? stepMax : max;
-
-
+    const strmax = Math.max(...dp[i]?.flat());
+    max = strmax > max ? strmax : max;
   }
 
   return max * max;
