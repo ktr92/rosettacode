@@ -1,13 +1,17 @@
 function maxProfit(prices: number[]): number {
   // dp[i] - текущий профит
-  // dp[0] = 0, 
-  // max(dp[i], dp[i] - dp[i - 1])
-  const dp = []
+  const dp = [];
+  let min = prices[0];
   dp[0] = prices[0];
   for(let i = 0; i < prices.length; i++) {
-   dp[i] = Math.max(prices[i] - dp[i], dp[i])
+    const price = prices[i]
+    if (price < min) {
+      min = price
+      dp[i] = 0
+    } else {
+      dp[i] = price - min;
+    }
   }
-  console.log(dp)
   return Math.max(...dp)
 };
 
