@@ -1,22 +1,17 @@
 function maxProfit2(prices: number[]): number {
-  // dp[i][j] - текущий профит если покупать в дату i и продать в дату j
+  // всегда покупать если след.меньше.
+  // dp[i] - профит на дату i
   const dp = [];
-  for (let i = 0; i < prices.length; i++) {
-    for (let j = prices.length - 1; j >= 0; j--) {
-      dp[i] = [];
-        for (let j = prices.length - 1; j >= 0; j--) {
-          if (j < i) {
-            dp[i][j] = 0;
-          } else {
-          dp[i][j] = prices[j] - prices[i] >= 0 ? prices[j] - prices[i] : 0;
 
-          }
-        }
-     
-    }
+  for (let i = 0; i < prices.length; i++) {
+      let profit = prices[i] - prices[i-1]
+      if (profit > 0) {
+        dp[i] = profit
+      } else {
+        dp[i] = 0
+      }
   }
-  console.log(dp);
-  return 1;
+  return dp.reduce((accumulator, current) => accumulator + current, 0);
 }
 
 module.exports = maxProfit2;

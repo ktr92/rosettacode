@@ -12,3 +12,7 @@ test('[7,6,4,3,1]', () => {
   expect(maxProfit2([7,6,4,3,1])).toBe(0);
 
 });
+test('[2,1,2,0,1]', () => {
+  expect(maxProfit2([2,1,2,0,1])).toBe(2);
+
+});
