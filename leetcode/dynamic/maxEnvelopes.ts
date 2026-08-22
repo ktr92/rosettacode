@@ -25,34 +25,24 @@ function maxEnvelopes(envelopes: number[][]): number {
 
     // dp[i] - длина цепочки вложенных конвертов в [i]
 
-    
+    const dp = [];
+
     envelopes.sort((a: number[], b: number[]) => {
-     if (a[0] === b[0]) return b[1] - a[1]
+     if (a[0] === b[0]) return a[1] - b[1]
      return a[0] - b[0]
     })
-    const mem = [];
-    for (let i = 0; i < envelopes.length; i++) {
-      let h = envelopes[i][1];
-      let left = 0;
-      let right = envelopes.length;
-      
-      while (left < right) {
-       let mid = Math.floor((left + right) / 2);
-       if (mem[mid] < h) {
-        left = mid + 1;
-       } else {
-        right = mid;
-       }
-      }
 
-      if (left < mem.length) {
-       mem[left] = envelopes[i][1];
-      } else {
-       mem.push(h)
+
+    for (let i = 0; i < envelopes.length; i++) {
+      dp[i] = 1;
+      for (let j = 0; j < i; j++) {
+        if (envelopes[j][0] < envelopes[i][0] && envelopes[j][1] < envelopes[i][1]) {
+         dp[i] = Math.max(dp[i], dp[j] + 1)
+        }
       }
     }
 
-    return mem.length
+    return Math.max(...dp)
 };
 
 
