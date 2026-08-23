@@ -23,31 +23,36 @@
 
  */
 function isValidSudoku(board: string[][]): boolean {
-  let valid = true;
-  const rows = [];
-  const cols = [];
-  const squares = [];
+  const rowsMap = Array.from({ length: 9 }, () => new Set());
+  const colsMap = Array.from({ length: 9 }, () => new Set());
+  const boxMap = Array.from({ length: 9 }, () => new Set());
 
   for (let i = 0; i < board.length; i++) {
-    rows[i] = [];
-    cols[i] = [];
     for (let j = 0; j < board[i].length; j++) {
-      
       const val = board[i][j];
 
-      if (val === ".") continue;
+      if (val === '.') continue;
 
-      if (rows[i][val]) return false;
-      rows[i][val] = val;
+      if (rowsMap[i].has(val)) {
+        return false;
+      }
+     
+      if (colsMap[i].has(val)) {
+        return false;
+      }
+      
+      const boxIndex = Math.floor(i / 3) * 3 + Math.floor(j / 3);
+      if (boxMap[boxIndex].has(val)) {
+        return false;
+      }
 
-      if (cols[i][board[j][i]]) return false;
-      cols[i][board[j][i]] = board[j][i];
+      rowsMap[i].add(val)
+      colsMap[j].add(val)
+      boxMap[boxIndex].add(val);
+
     }
   }
-
-  console.log(cols);
-
-  return valid;
+  return true;
 }
 
 module.exports = isValidSudoku;
