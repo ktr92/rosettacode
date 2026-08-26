@@ -37,7 +37,7 @@ function isValidSudoku(board: string[][]): boolean {
         return false;
       }
      
-      if (colsMap[i].has(val)) {
+      if (colsMap[j].has(val)) {
         return false;
       }
       
