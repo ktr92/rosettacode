@@ -31,6 +31,10 @@
     node.parent = null;
     return this.children.splice(childIndex, 1)[0] as TreeNode<T>;
   }
+
+   public getValue(): T {
+    return this.value;
+  }
 }
 
 export default TreeNode;

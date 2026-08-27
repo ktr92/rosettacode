@@ -4,13 +4,17 @@
     // File Layout
     // "rootDir": "./src",
     // "outDir": "./dist",
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+  
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "target": "esnext",
 
     // For nodejs:
     "lib": ["esnext"],
@@ -35,12 +39,10 @@
     // "noPropertyAccessFromIndexSignature": true,
 
     // Recommended Options
-    "strict": true,
     "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true
   }
 }

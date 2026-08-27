@@ -29,6 +29,10 @@ class BinaryTreeNode<T> {
     }
   }
 
+  public getValue(): T {
+    return this.value;
+  }
+
   public addChild(node: BinaryTreeNode<T>) {
     if (node instanceof BinaryTreeNode) {
       // если узел уже имеет другого родителя, открепим его от него

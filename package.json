@@ -13,7 +13,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/ktr92/rosettacode/issues"
   },
@@ -28,6 +27,7 @@
     "@types/node": "^26.1.2",
     "babel-jest": "^30.4.1",
     "jest": "^30.4.2",
+    "tsx": "^4.23.12",
     "typescript": "^7.0.2"
   }
 }

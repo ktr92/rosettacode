@@ -6,6 +6,8 @@ class Node {
 }
 
 class Queue {
+  public head: Node | null;
+  public tail: Node | null;
   constructor() {
     this.head = null;
     this.tail = null;
@@ -22,7 +24,7 @@ class Queue {
     this.tail = node;
   }
 
-  dequeue() {
+  dequeue(): Node | null {
     const head = this.head;
     if (!this.head) {
      this.tail = null
@@ -31,8 +33,14 @@ class Queue {
     this.head = head.next;
     return head.value;
   }
+
+  isEmpty() {
+    return this.head === null; 
+  }
 }
 
+export default Queue;
+/* 
 const a = new Queue();
 
 a.enqueue(3);
@@ -44,4 +52,4 @@ console.log(a.dequeue());
 
 
 
-console.log(a);
+console.log(a); */
