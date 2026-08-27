@@ -6,18 +6,12 @@ type universalTreeNode<T> = TreeNode<T> | BinaryTreeNode<T>;
 class Tree<T> {
   public root: universalTreeNode<T> | null;
 
-  constructor(root: universalTreeNode<T>) {
-    if (root instanceof TreeNode || root instanceof BinaryTreeNode) {
-      this.root = root;
-    } else {
-      this.root = null;
-    }
+  constructor(root: universalTreeNode<T> | null = null) {
+    this.root = root;
   }
 
   public isEmpty(): boolean {
-    const isRoot =
-      this.root instanceof TreeNode || this.root instanceof BinaryTreeNode;
-    return !isRoot;
+    return this.root === null;
   }
 }
 
