@@ -10,8 +10,8 @@ describe("breadthFirstSearch (BFS) для TreeNode и BinaryTreeNode", () => {
   test("находит значение в TreeNode-дереве (через TreeNode -> children)", () => {
     // Конструкторы зависят от вашей реализации TreeNode
     // Предположим, TreeNode(value, children)
-    const left = new TreeNode<number>(2, []);
-    const right = new TreeNode<number>(3, []);
+    const left = new TreeNode<number>(2);
+    const right = new TreeNode<number>(3);
     const root = new TreeNode<number>(1, null, [left, right]);
 
     const tree = new Tree<number>(root);
