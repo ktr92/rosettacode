@@ -46,15 +46,24 @@ class WeightedGraph<T> {
         neighbourMap.set(to, weight);
       }
     }
-    console.log(this.nodeMap);
   }
   shortestPath(start: T, end: T) {
     const visited = [];
+    const unvisited = new Set();
+    for (const [from, to] of this.edges) {
+      if (from != start ) unvisited.add(from);
+      if (to !== end) unvisited.add(to);
+      
+    }
+
+    let minPath = Infinity;
+
     let currentPath = this.nodeMap.get(start);
     let currentKey = start;
     this.costMap.set(start, 0);
 
-    while (currentKey !== end) {
+    while (currentKey !== end && unvisited.size !== 0) {
+       unvisited.delete(currentKey);
       /*  if (visited.indexOf(currentKey) !== -1) {
         break;
       } */
@@ -67,6 +76,7 @@ class WeightedGraph<T> {
       
       for (const [k, v] of currentPath.entries()) {
         // обновление стоимости достижения вершин
+        
         let newValue = currentCost + v;
 
         if (!this.costMap.has(k)) {
@@ -84,12 +94,20 @@ class WeightedGraph<T> {
           minValue = v;
           currentKey = k;
         }
+       
+        if (currentKey === end && unvisited.size > 0) {
+          currentKey = unvisited.values().next().value;
+          minValue = this.costMap.get(currentKey)
+        }
+
+
       }
 
       currentPath = this.nodeMap.get(currentKey);
-      console.log(this.costMap, currentKey);
+
+      if (minValue < minPath) minPath = currentPath;
     }
-    return this.costMap.get(currentKey);
+    return this.costMap.get(end);
   }
 }
 export { WeightedGraph };

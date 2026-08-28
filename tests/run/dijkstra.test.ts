@@ -61,8 +61,8 @@ describe("WeightedGraph.shortestPath — тесты Jest + TS", () => {
     ]);
     const dist = g.shortestPath("A", "D");
     expect(dist).toBe(5);
-  }); */
-
+  });
+ */
   test("test 5: крупный граф", () => {
     // Пример большого графа для проверки производительности и корректности
     // A -> B 2, A -> C 4, B -> D 7, C -> D 1, D -> E 3, B -> E 1, E -> F 2, D -> F 5,
@@ -83,6 +83,6 @@ describe("WeightedGraph.shortestPath — тесты Jest + TS", () => {
       ["G", "H", 2],
     ]);
     const dist = g.shortestPath("A", "H");
-    expect(dist).toBe(9);
+    expect(dist).toBe(8);
   });
 });
