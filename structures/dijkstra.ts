@@ -49,44 +49,51 @@ class WeightedGraph<T> {
     console.log(this.nodeMap);
   }
   shortestPath(start: T, end: T) {
+    const visited = [];
     let currentPath = this.nodeMap.get(start);
-    let currentNode = start;
-    let minKey = start;
-    let temp = 3;
+    let currentKey = start;
+    this.costMap.set(start, 0);
 
-    while (temp) {
-      if (!currentPath) return minKey;
-      for (const [k, v] of currentPath.entries()) {
-        let minValue = Infinity;
-        // выбор минимального из соседей на старте
-        if (v < minValue) {
-          minValue = v;
-          minKey = k;
-        }
+    while (currentKey !== end) {
+      /*  if (visited.indexOf(currentKey) !== -1) {
+        break;
+      } */
 
-        // обновление стоимости достижения вершин
-        
-        if (!this.costMap.has(k)) {
-          this.costMap.set(k,  this.costMap.get(minKey) + v);
-        } else {
-         // цена = старт + путь от старта до этого узла [k,v]
-         let newValue = this.costMap.get(minKey) + v;
-         if (newValue < this.costMap.get(k)) {
-          this.costMap.set(k, newValue)
-         } 
-        }
-        // найти вершину более короткую вершину от текущей
-      }
+      if (!currentPath) return undefined;
+
+      visited.push(currentKey);
+      const currentCost = this.costMap.get(currentKey);
+      let minValue = Infinity;
       
-      currentNode = minKey;
-      currentPath = this.nodeMap.get(minKey);
+      for (const [k, v] of currentPath.entries()) {
+        // обновление стоимости достижения вершин
+        let newValue = currentCost + v;
 
-      temp--;
+        if (!this.costMap.has(k)) {
+          this.costMap.set(k, currentCost + v);
+        } else {
+          // цена = старт + путь от старта до этого узла [k,v]
+          if (newValue < this.costMap.get(k)) {
+            this.costMap.set(k, newValue);
+          }
+        }
+        // на каждом шагу выбираем минимальный путь из возможных
+
+        // выбор минимального из соседей на старте
+        if (this.costMap.get(k) < minValue) {
+          minValue = v;
+          currentKey = k;
+        }
+      }
+
+      currentPath = this.nodeMap.get(currentKey);
+      console.log(this.costMap, currentKey);
     }
-    // обход графа и обновление стоимости каждой вершины
+    return this.costMap.get(currentKey);
   }
 }
-
+export { WeightedGraph };
+/* 
 const edges: Array<[string, string, number]> = [
   ["S", "A", 6],
   ["S", "B", 2],
@@ -96,4 +103,4 @@ const edges: Array<[string, string, number]> = [
 ];
 const g = new WeightedGraph(edges);
 
-console.log(g.shortestPath("S", "F"));
+console.log(g.shortestPath("S", "F")); */
