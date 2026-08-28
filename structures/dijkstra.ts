@@ -66,17 +66,19 @@ class WeightedGraph<T> {
         if (!this.costMap.has(k)) {
           this.costMap.set(k, v);
         } else {
-          /* this.costMap.set(k, newValue) */
+         this.costMap.set(k, newValue)
         }
 
         // найти вершину более короткую вершину от текущей
+
 
         if (k === end) {
           // дошли до конца
           /* return [minKey, minValue] */
         }
-        console.log(this.costMap, [minKey, minValue]);
+        
       }
+      console.log(this.costMap, [minKey, minValue]);
       startPath = this.nodeMap.get(minKey);
       temp--;
     }
