@@ -1,22 +1,32 @@
-import Tree from "./Tree";
-import TreeNode from "./TreeNode";
-import BinaryTreeNode from "./BinaryTreeNode";
+// breadthFirstSearch.ts (пример переработки вашего кода)
 
+import Tree from './Tree';
+import TreeNode from './TreeNode';
+import BinaryTreeNode from './BinaryTreeNode';
+import { NodeValue } from './types/binaryTreeNode.type'
 
-// требуем метод для получения значения
-export interface NodeValue<T> {
-  getValue(): T;
-}
-
+/**
+ * Узел, который может быть либо TreeNode, либо BinaryTreeNode и реализует NodeValue<T>.
+ */
 type nodeType<T> = TreeNode<T> & NodeValue<T> | BinaryTreeNode<T> & NodeValue<T>;
 
 function isTreeNode<T>(node: nodeType<T>): node is TreeNode<T> {
-  return node instanceof TreeNode;
+  return (node as any) instanceof TreeNode;
 }
 function isBinaryTreeNode<T>(node: nodeType<T>): node is BinaryTreeNode<T> {
-  return node instanceof BinaryTreeNode;
+  return (node as any) instanceof BinaryTreeNode;
 }
 
+/**
+ * Поиск узла в дереве в ширину (BFS).
+ * Поддерживает деревья, где узел может реализовывать TreeNode API
+ * или BinaryTreeNode API, через общий интерфейс NodeValue.
+ *
+ * @template T Тип значения в узле.
+ * @param tree Дерево, над которым выполняется поиск.
+ * @param target Значение, которое нужно найти в узле дерева.
+ * @returns Узел, у которого getValue() === target, или null если узел не найден.
+ */
 function breadthFirstSearch<T>(tree: Tree<T>, target: T): nodeType<T> | null {
   if (tree.isEmpty()) return null;
 
@@ -48,23 +58,5 @@ function breadthFirstSearch<T>(tree: Tree<T>, target: T): nodeType<T> | null {
 
   return null;
 }
-
-/* const root = new BinaryTreeNode<number>(10);
-const tree = new Tree<number>(root);
-const child1 = new BinaryTreeNode<number>(5);
-const child2 = new BinaryTreeNode<number>(4);
-const child1_1 = new BinaryTreeNode<number>(2);
-const child1_2 = new BinaryTreeNode<number>(3);
-const child2_1 = new BinaryTreeNode<number>(1);
-const child2_2 = new BinaryTreeNode<number>(0);
-
-(tree.root as BinaryTreeNode<number>).addChild(child1);
-(tree.root as BinaryTreeNode<number>).addChild(child2);
-(child1 as BinaryTreeNode<number>).addChild(child1_1);
-(child1 as BinaryTreeNode<number>).addChild(child1_2);
-(child2 as BinaryTreeNode<number>).addChild(child2_1);
-(child2 as BinaryTreeNode<number>).addChild(child2_2);
-
-console.log(breadthFirstSearch(tree, 4)) */
 
 export default breadthFirstSearch;

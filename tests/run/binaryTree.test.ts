@@ -1,4 +1,4 @@
-import { BinarySearchTree, BinarySearchNode } from "../../structures/BST";
+import { BinarySearchTree } from "../../structures/BinarySearchTree";
 
 describe("BinarySearchTree Variant A (через дерево)", () => {
   test("структура после последовательной вставки", () => {
