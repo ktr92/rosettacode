@@ -7,7 +7,7 @@ import { Node, IDoublyLinkedList } from "./types/linkedList.type"
  *
  * @template T Тип значения, хранимого в списке.
  */
-export class NodeList<T> implements IDoublyLinkedList<T> {
+export class LinkedList<T> implements IDoublyLinkedList<T> {
   public head: Node<T> | null = null;
   public tail: Node<T> | null = null;
 
