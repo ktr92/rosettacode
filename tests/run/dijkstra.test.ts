@@ -49,7 +49,7 @@ describe("WeightedGraph.shortestPath — тесты Jest + TS", () => {
     expect(dist).toBeUndefined();
   });
 
-/*   test("test 4: граф с циклом", () => {
+  test("test 4: граф с циклом", () => {
     // A -> B 2, B -> C 2, C -> A 1 (цикл), B -> D 5, C -> D 1
     // минимальный A -> D: A-B-D (7) vs A-B-C-D (2+2+1=5) -> 5
     const g = new WeightedGraph<string>([
@@ -62,7 +62,7 @@ describe("WeightedGraph.shortestPath — тесты Jest + TS", () => {
     const dist = g.shortestPath("A", "D");
     expect(dist).toBe(5);
   });
- */
+
   test("test 5: крупный граф", () => {
     // Пример большого графа для проверки производительности и корректности
     // A -> B 2, A -> C 4, B -> D 7, C -> D 1, D -> E 3, B -> E 1, E -> F 2, D -> F 5,
