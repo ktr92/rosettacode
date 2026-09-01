@@ -40,26 +40,24 @@ function longestCommonSubsequence(text1: string, text2: string): number {
 
   const len1 = text1.length;
   const len2 = text2.length;
-  let x = 0;
+
   for (let i = 0; i < len1; i++) {
     if (i > 0) {
-     dp[i] = [];
+      dp[i] = [];
     }
 
     for (let j = 0; j < len2; j++) {
-    
-     if (text1[i] === text2[j] && j > x) {
-       dp[i][j] = dp[i][j - 1] + 1;
-       x++
-     } else {
-       dp[i][j] = dp[i][j - 1]
-     }
-    
+      if (text1[i] === text2[j]) {
+        dp[i][j] = 1;
+  
+      } else {
+        dp[i][j] = 0;
+      }
     }
-    console.log(dp)
+    console.log(dp);
   }
 
-  return Math.max(...dp.flat())
+  return dp.flat().reduce((acc, v) => (acc += v));
 }
 
 export default longestCommonSubsequence;
