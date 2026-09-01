@@ -34,8 +34,19 @@ text1 and text2 consist of only lowercase English characters.
  * @param text2 
  */
 function longestCommonSubsequence(text1: string, text2: string): number {
- 
-}
+  // dp[i][j] - длина наибольшего совпадения на индексе i первого слова и на j второго слова.
+  const dp: number[][] = [];
+  dp[0] = text1[0] === text2[0] ? [1] : [0];
 
+  const len1 = text1.length;
+  const len2 = text2.length;
+
+  for (let i = 0; i < len1; i++) {
+    for (let j = i; j < len2; j++) {
+    }
+  }
+
+  return dp[len1 - 1][len2 - 1];
+}
 
 export default longestCommonSubsequence;
