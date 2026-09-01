@@ -47,7 +47,7 @@ function longestCommonSubsequence(text1: string, text2: string): number {
       dp[i] = [];
     }
     
-    for (let j = 0; j < len2; j++) {
+    for (let j = pointer; j < len2; j++) {
       let prev = dp[i - 1];
       if (i < 1) {
         prev = Array(len2).fill(0)
@@ -68,7 +68,6 @@ function longestCommonSubsequence(text1: string, text2: string): number {
       }
     }
   }
-  console.log(dp)
   return Math.max(...dp.flat());
 }
 
