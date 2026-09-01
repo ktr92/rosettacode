@@ -34,4 +34,7 @@ describe('longestCommonSubsequence', () => {
   test("'ezupkr', 'ubmrapg'", () => {
     expect(longestCommonSubsequence('ezupkr', 'ubmrapg')).toBe(2);
   });
+  test("'bsbininm', 'jmjkbkjkv'", () => {
+    expect(longestCommonSubsequence('bsbininm', 'jmjkbkjkv')).toBe(1);
+  });
 });

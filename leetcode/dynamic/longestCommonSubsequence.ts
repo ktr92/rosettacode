@@ -39,35 +39,29 @@ function longestCommonSubsequence(text1: string, text2: string): number {
   const len1 = text1.length;
   const len2 = text2.length;
 
-  let pointer = text1[0] === text2[0] ? 1 : 0;
   dp[0] = text1[0] === text2[0] ? Array(len2).fill(1) : Array(len2).fill(0);
 
-  for (let i = 0; i < len1; i++) {
-    if (i > 0) {
-      dp[i] = [];
-    }
-    
-    for (let j = pointer; j < len2; j++) {
-      let prev = dp[i - 1];
-      if (i < 1) {
-        prev = Array(len2).fill(0)
-      }
+  for (let i = 1; i < len1; i++) {
+    if (i > 0) dp[i] = [];
+    for (let j = 0; j < len2; j++) {
       if (j > 0) {
-        if (text1[i] === text2[j] && j >= pointer) {
-          dp[i][j] = prev[j - 1] + 1;
-          pointer = j;
+        if (text1[i] === text2[j]) {
+          dp[i][j] = dp[i][j - 1] + 1;
         } else {
           dp[i][j] = dp[i][j - 1];
         }
       } else {
         if (text1[i] === text2[j]) {
-          dp[i][j] = 1;
+          dp[i][j] = Math.max(...dp[i-1]) + 1;
         } else {
-          dp[i][j] = Math.max(...prev);
+          dp[i][j] = Math.max(...dp[i-1]);
         }
       }
     }
   }
+
+  console.log(dp);
+
   return Math.max(...dp.flat());
 }
 
