@@ -1,6 +1,9 @@
 import longestCommonSubsequence from './../../leetcode/dynamic/longestCommonSubsequence';
 
 describe('longestCommonSubsequence', () => {
+  test("'aaxyzbcd', 'abcxyzd'", () => {
+    expect(longestCommonSubsequence('aaxyzbcd', 'abcxyzd')).toBe(3);
+  });
   test('Example 1', () => {
     expect(longestCommonSubsequence('abcde', 'ace')).toBe(3);
   });
