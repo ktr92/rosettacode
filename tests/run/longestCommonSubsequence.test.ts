@@ -4,7 +4,7 @@ describe('longestCommonSubsequence', () => {
   test('Example 1', () => {
     expect(longestCommonSubsequence('abcde', 'ace')).toBe(3);
   });
-/* 
+
   test("'abc', 'abc'", () => {
     expect(longestCommonSubsequence('abc', 'abc')).toBe(3);
   });
@@ -21,8 +21,8 @@ describe('longestCommonSubsequence', () => {
   test('one string is empty', () => {
     expect(longestCommonSubsequence('', 'abc')).toBe(0);
   });
-*/
-/*   test('identical long strings', () => {
+
+  test('identical long strings', () => {
     expect(longestCommonSubsequence('aaaa', 'aaaaa')).toBe(4);
-  });  */
+  });
 });
