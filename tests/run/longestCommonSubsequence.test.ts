@@ -2,9 +2,9 @@ import longestCommonSubsequence from './../../leetcode/dynamic/longestCommonSubs
 
 describe('longestCommonSubsequence', () => {
   test("'aaxyzbcd', 'abcxyzd'", () => {
-    expect(longestCommonSubsequence('aaxyzbcd', 'abcxyzd')).toBe(3);
+    expect(longestCommonSubsequence('aaxyzbcd', 'abcxyzd')).toBe(5);
   });
-  test('Example 1', () => {
+  test("'abcde', 'ace'", () => {
     expect(longestCommonSubsequence('abcde', 'ace')).toBe(3);
   });
 
@@ -27,5 +27,11 @@ describe('longestCommonSubsequence', () => {
 
   test('identical long strings', () => {
     expect(longestCommonSubsequence('aaaa', 'aaaaa')).toBe(4);
+  });
+  test("'bl', 'yby'", () => {
+    expect(longestCommonSubsequence('bl', 'yby')).toBe(1);
+  });
+  test("'ezupkr', 'ubmrapg'", () => {
+    expect(longestCommonSubsequence('ezupkr', 'ubmrapg')).toBe(2);
   });
 });
