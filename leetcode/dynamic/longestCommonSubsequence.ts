@@ -41,26 +41,33 @@ function longestCommonSubsequence(text1: string, text2: string): number {
 
   dp[0] = text1[0] === text2[0] ? Array(len2).fill(1) : Array(len2).fill(0);
 
+  const getMax = (arr: number[]) =>
+    arr.reduce((max, current) => (current > max ? current : max), -Infinity);
 
   for (let i = 0; i < len1; i++) {
-    let prevRow = dp[i-1]
+
     if (i > 0) {
       dp[i] = [];
-    } else {
-      prevRow = Array(len2).fill(0)
     }
     for (let j = 0; j < len2; j++) {
-      const prevCol = j > 0 ? prevRow[j - 1] : 0
+
+      dp[i - 1] = i > 0 ? dp[i - 1] : Array(len2).fill(0);
+
+      let prevTop = dp[i - 1][j] || 0;
+      let prevTopLeft = dp[i - 1][j - 1] || 0;
+      let prevLeft = dp[i][j - 1] || 0;
+
+      const prevMax = getMax([prevTopLeft, 0]);
+      const rowMax = getMax([prevLeft, prevTop, prevTopLeft, 0]);
+
       if (text1[i] === text2[j]) {
-        dp[i][j] = Math.max(prevRow[j-1] || 0, prevCol, 0) + 1; 
+        dp[i][j] = prevMax + 1;
       } else {
-        dp[i][j] = Math.max(...dp[i], prevRow[j], prevCol, 0)
+        dp[i][j] = rowMax;
       }
     }
   }
-
-  console.log(dp)
-  return Math.max(...dp.flat());
+  return getMax([...dp.flat()]);
 }
 
 export default longestCommonSubsequence;
