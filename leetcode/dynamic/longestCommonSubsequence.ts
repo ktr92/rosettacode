@@ -43,23 +43,22 @@ function longestCommonSubsequence(text1: string, text2: string): number {
 
 
   for (let i = 0; i < len1; i++) {
-    let prev = dp[i-1]
+    let prevRow = dp[i-1]
     if (i > 0) {
       dp[i] = [];
     } else {
-      prev = Array(len2).fill(0)
+      prevRow = Array(len2).fill(0)
     }
     for (let j = 0; j < len2; j++) {
+      const prevCol = j > 0 ? prevRow[j - 1] : 0
       if (text1[i] === text2[j]) {
-        dp[i][j] = Math.max(prev[j], 0) + 1;
-
+        dp[i][j] = Math.max(prevRow[j], 0) + 1; 
       } else {
-        dp[i][j] = Math.max(...dp[i], prev[j], 0)
+        dp[i][j] = Math.max(...dp[i], prevCol, 0)
       }
     }
   }
 
-  console.log(dp)
   return Math.max(...dp.flat());
 }
 

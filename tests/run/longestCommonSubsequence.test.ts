@@ -36,4 +36,7 @@ describe('longestCommonSubsequence', () => {
   test("'oxcpqrsvwf', 'shmtulqrypy'", () => {
     expect(longestCommonSubsequence('oxcpqrsvwf', 'shmtulqrypy')).toBe(2);
   });
+  test("'hofubmnylkra', 'pqhgxgdofcvmr'", () => {
+    expect(longestCommonSubsequence('hofubmnylkra', 'pqhgxgdofcvmr')).toBe(5);
+  });
 });
