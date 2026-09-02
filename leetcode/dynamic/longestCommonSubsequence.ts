@@ -42,20 +42,12 @@ function longestCommonSubsequence(text1: string, text2: string): number {
   dp[0] = text1[0] === text2[0] ? Array(len2).fill(1) : Array(len2).fill(0);
 
   for (let i = 1; i < len1; i++) {
-    if (i > 0) dp[i] = [];
+    dp[i] = [];
     for (let j = 0; j < len2; j++) {
-      if (j > 0) {
-        if (text1[i] === text2[j]) {
-          dp[i][j] = dp[i][j - 1] + 1;
-        } else {
-          dp[i][j] = dp[i][j - 1];
-        }
+      if (text1[i] === text2[j]) {
+        dp[i][j] = (j > 0) ? (dp[i][j - 1] + 1) : (Math.max(...dp[i - 1]) + 1);
       } else {
-        if (text1[i] === text2[j]) {
-          dp[i][j] = Math.max(...dp[i-1]) + 1;
-        } else {
-          dp[i][j] = Math.max(...dp[i-1]);
-        }
+        dp[i][j] = (j > 0) ? (dp[i][j - 1]) : (Math.max(...dp[i - 1]));
       }
     }
   }
