@@ -52,9 +52,9 @@ function longestCommonSubsequence(text1: string, text2: string): number {
     for (let j = 0; j < len2; j++) {
       const prevCol = j > 0 ? prevRow[j - 1] : 0
       if (text1[i] === text2[j]) {
-        dp[i][j] = Math.max(prevRow[j], 0) + 1; 
+        dp[i][j] = Math.max(prevRow[j-1] || 0, prevCol, 0) + 1; 
       } else {
-        dp[i][j] = Math.max(...dp[i], prevCol, 0)
+        dp[i][j] = Math.max(...dp[i], prevRow[j], prevCol, 0)
       }
     }
   }
