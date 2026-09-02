@@ -12,20 +12,16 @@ describe('longestCommonSubsequence', () => {
     expect(longestCommonSubsequence('abc', 'abc')).toBe(3);
   });
 
-  test('Example 3', () => {
+  test('no common characters', () => {
     expect(longestCommonSubsequence('abc', 'def')).toBe(0);
   });
 
-  // Дополнительные тесты
-  test('no common characters', () => {
-    expect(longestCommonSubsequence('xyz', 'abc')).toBe(0);
-  });
 
   test('one string is empty', () => {
     expect(longestCommonSubsequence('', 'abc')).toBe(0);
    });
 
-  test('identical long strings', () => {
+  test("'aaaa', 'aaaaa'", () => {
     expect(longestCommonSubsequence('aaaa', 'aaaaa')).toBe(4);
   });
   test("'bl', 'yby'", () => {
@@ -36,5 +32,8 @@ describe('longestCommonSubsequence', () => {
   });
   test("'bsbininm', 'jmjkbkjkv'", () => {
     expect(longestCommonSubsequence('bsbininm', 'jmjkbkjkv')).toBe(1);
+  });
+  test("'oxcpqrsvwf', 'shmtulqrypy'", () => {
+    expect(longestCommonSubsequence('oxcpqrsvwf', 'shmtulqrypy')).toBe(2);
   });
 });
