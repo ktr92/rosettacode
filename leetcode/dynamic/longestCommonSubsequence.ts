@@ -39,7 +39,7 @@ function longestCommonSubsequence(text1: string, text2: string): number {
   const len1 = text1.length;
   const len2 = text2.length;
 
-  dp[0] = text1[0] === text2[0] ? Array(len2).fill(1) : Array(len2).fill(0);
+  dp[0] = text1[0] === text2[0] ? [1] : [0];
 
 
   for (let i = 0; i < len1; i++) {
@@ -49,7 +49,7 @@ function longestCommonSubsequence(text1: string, text2: string): number {
     }
     for (let j = 0; j < len2; j++) {
 
-      dp[i - 1] = i > 0 ? dp[i - 1] : Array(len2).fill(0);
+      dp[i - 1] = i > 0 ? dp[i - 1] : [0];
 
       let prevTop = dp[i - 1][j] || 0;
       let prevTopLeft = dp[i - 1][j - 1] || 0;
