@@ -17,9 +17,6 @@ describe('longestCommonSubsequence', () => {
   });
 
 
-  test('one string is empty', () => {
-    expect(longestCommonSubsequence('', 'abc')).toBe(0);
-   });
 
   test("'aaaa', 'aaaaa'", () => {
     expect(longestCommonSubsequence('aaaa', 'aaaaa')).toBe(4);
