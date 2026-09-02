@@ -59,6 +59,7 @@ function longestCommonSubsequence(text1: string, text2: string): number {
     }
   }
 
+  console.log(dp)
   return Math.max(...dp.flat());
 }
 
