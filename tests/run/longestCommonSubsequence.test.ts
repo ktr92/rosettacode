@@ -1,4 +1,4 @@
-import longestCommonSubsequence from './../../leetcode/dynamic/longestCommonSubsequence';
+import longestCommonSubsequence from '../../leetcode/dynamic/longestCommonSubsequence';
 
 describe('longestCommonSubsequence', () => {
   test("'aaxyzbcd', 'abcxyzd'", () => {
