@@ -14,6 +14,8 @@ function isPalindrome(head: ListNode | null): boolean {
     let left = head;
     let right = head;
     let current = head;
+    if (!head.next) return true;
+    if (head.val === head.next.val) return true; 
     while (right.next) {
         right = right.next;
     }        
