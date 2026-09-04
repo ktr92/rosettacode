@@ -1,26 +1,58 @@
-/**
- * Definition for singly-linked list.
- * class ListNode {
- *     val: number
- *     next: ListNode | null
- *     constructor(val?: number, next?: ListNode | null) {
- *         this.val = (val===undefined ? 0 : val)
- *         this.next = (next===undefined ? null : next)
- *     }
- * }
+/* 
+  class ListNode {
+      val: number
+      next: ListNode | null
+      constructor(val?: number, next?: ListNode | null) {
+          this.val = (val===undefined ? 0 : val)
+          this.next = (next===undefined ? null : next)
+      }
+  }
  */
 
 function isPalindrome(head: ListNode | null): boolean {
-    let left = head;
-    let right = head;
-    let current = head;
     if (!head.next) return true;
-    if (head.val === head.next.val) return true; 
+
+    let mid = head;
+    let right = head;
+
+   
+
+    while (right.next) {
+        mid = right.next.next ? mid.next : mid;
+        right = right.next.next ? right.next.next : right.next;
+    }
+
+    let reversed = null;
+    
+    while (mid !== null) {
+        let swap = mid.next;
+        mid.next = reversed;
+        reversed = mid
+        mid = swap;
+    }
+   
+
+    while (head?.next || reversed?.next) {
+        if (reversed.val !== head.val) return false;
+
+        reversed = reversed.next;
+        head = head.next;
+    }
+
+    return true
+
+/*     let left = head;
+    let right = head;
+    let current = head; */
+    /* 
+    if (!head.next) return true;
     while (right.next) {
         right = right.next;
-    }        
-    while (left.next !== right || left !== right) {
-        console.log(right.val)
+    }
+    if (left?.next === right && left.val !== right?.val) return false
+
+    while (left.next !== right && left !== right) {
+
         current = left;
         while (current.next !== right) {
             current = current.next;
@@ -37,5 +69,12 @@ function isPalindrome(head: ListNode | null): boolean {
         
     }
 
-    return true
+    if (left.val === right.val) {
+        return true
+    } else {
+        return false
+    }
+ */
 };
+
+export default isPalindrome;
