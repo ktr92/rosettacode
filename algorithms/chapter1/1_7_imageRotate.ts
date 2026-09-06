@@ -5,15 +5,22 @@
  */
 
 function imageRotate(matrix: number[][]) {
+
+ const rotated = []
+ const size = matrix.length - 1;
  
- for (let i = 0; i < matrix.length; i++) {
+ for (let i = 0; i <= size; i++) {
+   rotated[i] = []
   const element = matrix[i];
-  for (let j = 0; j < matrix[i].length; j++) {
+  for (let j = 0; j <= size; j++) {
    const element = matrix[i][j];
-   
+    rotated[i][j] = matrix[size - j][i]
   }
   
  }
+ console.log(rotated)
 }
+
+
 
 export default imageRotate;
