@@ -5,22 +5,34 @@
  */
 
 function imageRotate(matrix: number[][]) {
+  const size = matrix.length - 1;
 
- const rotated = []
- const size = matrix.length - 1;
- 
- for (let i = 0; i <= size; i++) {
-   rotated[i] = []
-  const element = matrix[i];
-  for (let j = 0; j <= size; j++) {
-   const element = matrix[i][j];
-    rotated[i][j] = matrix[size - j][i]
-  }
+  for (let i = 0; i <= 2; i++) {
+
+    let end = size - 1
+
+    for (let j = 0; j <= end; j++) {
+
   
- }
- console.log(rotated)
+      const tmp = matrix[i][j];
+
+      // bottomleft -> topleft
+      matrix[i][j] = matrix[size - j][i];
+
+      // bottomright -> bottomleft
+      matrix[size - j][i] = matrix[size - j][size - i]
+
+      // topright -> bottomright
+      matrix[size - j][size - i] =  matrix[i][size - j]
+
+      // topleft -> topright
+      matrix[i][size - j] = tmp
+    }
+  }
+
+
+  
+  console.log(matrix);
 }
-
-
 
 export default imageRotate;
