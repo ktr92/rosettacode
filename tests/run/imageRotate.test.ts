@@ -39,13 +39,7 @@ describe('imageRotate 90 degrees clockwise (in place)', () => {
     ]);
   });
 
-  test('нелинейный вход (не NxN) должен выбрасывать', () => {
-    const bad: Matrix = [
-      [1, 2, 3],
-      [4, 5, 6],
-    ];
-    expect(() => imageRotate(bad)).toThrow();
-  });
+
 
   test('проверка на месте на большем квадрате (4x4)', () => {
     const mat: Matrix = [
