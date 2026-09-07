@@ -1,6 +1,9 @@
+/**
+ *  *  Пространственную сложность можно сократить до О(1), используя первую строку
+как замену для  mapRows, а первый столбец - как замену для  mapCols.
+ */
+
 function setZeroes(matrix: number[][]) {
-
-
   const mapRows = new Set();
   const mapCols = new Set();
 
