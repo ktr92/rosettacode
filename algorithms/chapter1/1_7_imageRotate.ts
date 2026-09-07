@@ -7,26 +7,29 @@
 function imageRotate(matrix: number[][]) {
   const size = matrix.length - 1;
 
-  for (let i = 0; i <= 2; i++) {
+  for (let i = 0; i <= 0; i++) {
 
     let end = size - 1
+    // j начинается i чтобы сдвинуться с ранее замененных
+    for (let j = i; j < size; j++) {
 
-    for (let j = 0; j <= end; j++) {
+      // надо вернуться на 0 строку
+      let row_index = 0;
+      let offset = size - j;
 
-  
-      const tmp = matrix[i][j];
+      const tmp = matrix[0][j];
+      
+      // topleft = bottomleft
+      matrix[0][j] = matrix[offset][0];
 
-      // bottomleft -> topleft
-      matrix[i][j] = matrix[size - j][i];
+      // bottomleft = bottomright
+      matrix[offset][0] = matrix[size][offset]
 
-      // bottomright -> bottomleft
-      matrix[size - j][i] = matrix[size - j][size - i]
+      // bottomright = topright
+      matrix[size][offset] =  matrix[j][size]
 
-      // topright -> bottomright
-      matrix[size - j][size - i] =  matrix[i][size - j]
-
-      // topleft -> topright
-      matrix[i][size - j] = tmp
+      // topright = topleft
+      matrix[j][size] = tmp
     }
   }
 
