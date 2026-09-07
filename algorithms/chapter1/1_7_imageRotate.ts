@@ -12,7 +12,7 @@ function imageRotate(matrix: number[][]) {
     let end = size - 1
 
     for (let j = 0; j <= end; j++) {
-
+      
   
       const tmp = matrix[i][j];
 
