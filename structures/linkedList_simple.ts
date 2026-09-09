@@ -38,3 +38,25 @@ export function linkedListToArray<T>(list: ListNode<T>) {
   return res
 }
 
+
+export function createSinglyLinkedList<T>(arr: T[]): SinglyListNode<T> {
+  const head = new SinglyListNode(arr[0], null);
+  let list = head;
+
+  for (let i = 1; i <= arr.length; i++) {
+    list.next = new SinglyListNode(arr[i], null);
+    list = list.next;
+  }
+
+  return head;
+}
+
+export function linkedSinglyListToArray<T>(list: SinglyListNode<T>) {
+  const res = []
+  while (list) {
+    res.push(list.val)
+    list = list.next
+  }
+  return res
+}
+

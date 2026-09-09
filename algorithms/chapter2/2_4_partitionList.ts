@@ -1,7 +1,10 @@
 import {
   createLinkedList,
+  createSinglyLinkedList,
   linkedListToArray,
+  linkedSinglyListToArray,
   ListNode,
+  SinglyListNode,
 } from "../../structures/linkedList_simple";
 
 /**
@@ -15,23 +18,31 @@ import {
 
  */
 
-function groupBy(head: ListNode<number>, value: number): ListNode<number> {
+function partitionList(head: SinglyListNode<number>, value: number): SinglyListNode<number> {
+  let less = new SinglyListNode(0, null);
+  let greater = new SinglyListNode(0, null);
+
+  const newTail = greater;
+  const newHead = less;
+
   let node = head;
-  let newlist = null;
-
   while (node.next) {
-   node = node.next;
+    if (node.val < value) {
+      less.next = node;
+      less = less.next
+    } else {
+      greater.next = node;
+      greater = greater.next;
+    }
+    node = node.next;
    
-   if (node.val < value) {
-    newlist = node;
-    newlist.next = newlist;
-   }
   }
-
-  return newlist;
+  greater.next = null;
+  less.next = newTail.next;
+  return newHead.next;
 }
 
-const head = createLinkedList([3, 5, 8, 5, 10, 2, 1]);
-console.log(linkedListToArray(groupBy(head, 5))); // [3,1,2,10,5,5,8]
+const head = createSinglyLinkedList([3, 5, 8, 5, 10, 2, 1]);
+console.log(linkedSinglyListToArray(partitionList(head, 5))); // [3,1,2,10,5,5,8]
 
-export default groupBy;
+export default partitionList;
