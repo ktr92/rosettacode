@@ -1,11 +1,11 @@
 import removeDublicates from "../../algorithms/chapter2/2_1_removeDublicate";
-import { createLinkedList } from './../../structures/linkedList_simple';
+import { createLinkedList, linkedListToArray } from './../../structures/linkedList_simple';
 
 describe('removeDuplicates', () => {
   // Тест-хелпер для сокращения шаблонного кода
   const runTest = (input: number[], expected: number[]) => {
     const list = createLinkedList(input);
-    const updatedList = removeDuplicates(list);
+    const updatedList = removeDublicates(list);
     expect(linkedListToArray(updatedList)).toEqual(expected);
   };
 

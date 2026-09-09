@@ -1,4 +1,4 @@
-export class ListNode<T> {
+export class SinglyListNode<T> {
   val: T | null;
   next: ListNode<T> | null;
   constructor(val?: T, next?: ListNode<T> | null) {
@@ -6,16 +6,36 @@ export class ListNode<T> {
     this.next = next === undefined ? null : next;
   }
 }
+export class ListNode<T> {
+  val: T | null;
+  next: ListNode<T> | null;
+  prev: ListNode<T> | null;
+  constructor(val?: T, next?: ListNode<T> | null, prev?: ListNode<T> | null) {
+    this.val = val === undefined ? null : val;
+    this.next = next === undefined ? null : next;
+    this.prev = prev === undefined ? null : prev;
+  }
+}
 
 export function createLinkedList<T>(arr: T[]): ListNode<T> {
-  const head = new ListNode(arr[i], arr[1] ? new ListNode(arr[1]) : null);
+  const head = new ListNode(arr[0], null, null);
+  let list = head;
 
-  for (let i = 1; i < array.length; i++) {
-    const element = new ListNode(
-      arr[i],
-      arr[i + 1] ? new ListNode(arr[i + 1]) : null,
-    );
+  for (let i = 1; i <= arr.length; i++) {
+    list.next = new ListNode(arr[i], null, list);
+    list = list.next;
   }
 
   return head;
 }
+
+export function linkedListToArray<T>(list: ListNode<T>) {
+  const res = []
+  while (list.next) {
+    res.push(list.val)
+    list = list.next
+  }
+  return res
+}
+
+console.log(createLinkedList([4, 2, 1, 4, 3, 1, 2]))
