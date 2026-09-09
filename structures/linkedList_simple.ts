@@ -31,7 +31,7 @@ export function createLinkedList<T>(arr: T[]): ListNode<T> {
 
 export function linkedListToArray<T>(list: ListNode<T>) {
   const res = []
-  while (list.next) {
+  while (list && list.next) {
     res.push(list.val)
     list = list.next
   }
