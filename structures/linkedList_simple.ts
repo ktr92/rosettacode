@@ -38,4 +38,3 @@ export function linkedListToArray<T>(list: ListNode<T>) {
   return res
 }
 
-console.log(createLinkedList([4, 2, 1, 4, 3, 1, 2]))

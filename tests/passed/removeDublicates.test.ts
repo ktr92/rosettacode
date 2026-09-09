@@ -1,5 +1,5 @@
 import removeDublicates from "../../algorithms/chapter2/2_1_removeDublicate";
-import { createLinkedList, linkedListToArray } from './../../structures/linkedList_simple';
+import { createLinkedList, linkedListToArray } from '../../structures/linkedList_simple';
 
 describe('removeDuplicates', () => {
   // Тест-хелпер для сокращения шаблонного кода
