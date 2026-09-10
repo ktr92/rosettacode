@@ -1,7 +1,7 @@
 import {
   createLinkedList,
   linkedListToArray,
-  ListNode,
+  SinglyListNode,
 } from "../../structures/linkedList_simple";
 
 /**
@@ -15,20 +15,20 @@ import {
 
  */
 
-function groupBy(head: ListNode<number>, value: number): ListNode<number> {
+function groupBy(head: SinglyListNode<number>, value: number): SinglyListNode<number> {
   let node = head;
-  let newlist = null;
+  let newList = null;
+
 
   while (node.next) {
-   node = node.next;
-   
-   if (node.val < value) {
-    newlist = node;
-    newlist.next = newlist;
-   }
+    if (node.val < value) {
+      console.log(node.next.val)
+      newList = node;
+    }
+    node = node.next
   }
 
-  return newlist;
+  return newList;
 }
 
 const head = createLinkedList([3, 5, 8, 5, 10, 2, 1]);
