@@ -42,11 +42,11 @@ export function linkedListToArray<T>(list: ListNode<T> | SinglyListNode<T>) {
 }
 
 
-export function createSinglyLinkedList(arr: number[]): SinglyListNode<number> {
-  const head = { val: arr[0], next: null } as SinglyListNode<number>;
+export function createSinglyLinkedList<T>(arr: T[]): SinglyListNode<T> {
+  const head = { val: arr[0], next: null } as SinglyListNode<T>;
   let current = head;
   for (let i = 1; i < arr.length; i++) {
-    current.next = { val: arr[i], next: null } as SinglyListNode<number>;
+    current.next = { val: arr[i], next: null } as SinglyListNode<T>;
     current = current.next;
   }
   return head;
