@@ -63,6 +63,11 @@ export class Queue<T> implements IQueue<T> {
     return head.value;
   }
 
+  peek(): T | null {
+    if (!this.head) return null;
+    return this.head?.value
+  }
+
   /**
    * Проверяет, пустая ли очередь.
    * @returns true, если очередь пуста; иначе false.

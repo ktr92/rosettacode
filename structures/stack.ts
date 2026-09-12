@@ -1,6 +1,6 @@
 
 
-import { INode, IStack } from "../../types/stack.type"
+import { INode, IStack } from "../types/stack.type"
 
 
 export class Node<T> implements INode<T> {
