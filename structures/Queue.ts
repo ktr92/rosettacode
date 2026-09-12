@@ -1,5 +1,5 @@
-import { Node } from "../../types/queue.type"
-import { IQueue } from "../../types/queue.type"
+import { Node } from "../types/queue.type"
+import { IQueue } from "../types/queue.type"
 
 /**
  * Однонаправленная очередь (FIFO) на связном списке.
