@@ -1,6 +1,6 @@
 import TreeNode from "./TreeNode";
 import BinaryTreeNode from "./BinaryTreeNode";
-import { UniversalTreeNode } from "./types/tree.type"
+import { UniversalTreeNode } from "../types/tree.type"
 
 /**
  * Простое дерево, которое может содержать любой узел: TreeNode<T> или BinaryTreeNode<T>.

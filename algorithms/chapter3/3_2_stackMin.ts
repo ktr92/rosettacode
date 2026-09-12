@@ -1,6 +1,6 @@
 
 
-import { INode, IStack } from "../types/stack.type"
+import { INode, IStack } from "../../types/stack.type"
 
 
 export class Node<T> implements INode<T> {
@@ -8,6 +8,8 @@ export class Node<T> implements INode<T> {
   public value: T;
   /** Следующий узел в стеке (или null, если этот узел последний). */
   public next: Node<T> | null = null;
+
+  public min: T | null = null;
 
   /**
    * Конструктор узла.
@@ -44,6 +46,11 @@ export class Stack<T> implements IStack<T> {
     const node = new Node<T>(value);
     node.next = this.head;
     this.head = node;
+    if (!node.next) {
+     node.min = value
+    } else {
+     node.min = value < node.next?.min  ? value : node.next?.min;
+    }
   }
 
   /**
@@ -67,9 +74,27 @@ export class Stack<T> implements IStack<T> {
   }
 
   /**
+   * Возвращает минимальное значение стека O(1).
+   * @returns Значение минимального элемента или undefined, если стек пуст.
+   */
+  min(): T | null {
+   if (!this.head) return null;
+   return this.head?.min;
+  }
+
+  /**
    * Очищает стек.
    */
   clear(): void {
     this.head = null;
   }
 }
+
+/* 
+const st = new Stack();
+
+st.add(4)
+st.add(2)
+st.add(1)
+
+console.log(st.min()) */
