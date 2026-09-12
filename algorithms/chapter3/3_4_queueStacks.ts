@@ -80,15 +80,17 @@ export class QueueStack<T> {
  private oldest: Stack<T> = new Stack();
 
  push(value: T) {
-  this.newest.add(value)
+  while (this.oldest.head !== null) {
+   this.newest.add(this.oldest.get() as T)
+  }
+  this.oldest.add(value)
  }
  
  pop() {
+  let head = this.newest.head;
   while (this.newest.head !== null) {
-   this.oldest.add(this.newest.head.value)
-   this.newest.head = this.newest.head.next;
+   this.oldest.add(this.newest.get() as T)
   }
-
   return this.oldest.get()
  }
 
@@ -100,12 +102,17 @@ export class QueueStack<T> {
 
 const queue = new QueueStack();
 
-queue.push(1)
+/* queue.push(1)
 queue.push(2)
 queue.push(3)
 queue.push(4)
 
 console.log(queue.pop())
 console.log(queue.pop())
+
+
+queue.push(5)
+
 console.log(queue.pop())
+console.log(queue.pop()) */
 console.log(queue.pop())

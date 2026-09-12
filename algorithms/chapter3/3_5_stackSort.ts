@@ -1,13 +1,12 @@
-
-
-import { INode, IStack } from "../../types/stack.type"
-
+import { INode, IStack } from "../../types/stack.type";
 
 export class Node<T> implements INode<T> {
   /** Значение узла. */
   public value: T;
   /** Следующий узел в стеке (или null, если этот узел последний). */
   public next: Node<T> | null = null;
+
+  public min: T | null = null;
 
   /**
    * Конструктор узла.
@@ -17,7 +16,6 @@ export class Node<T> implements INode<T> {
     this.value = value;
   }
 }
-
 
 /**
  * Реализация стека (LIFO) на связном списке.
@@ -44,6 +42,11 @@ export class Stack<T> implements IStack<T> {
     const node = new Node<T>(value);
     node.next = this.head;
     this.head = node;
+    if (!node.next) {
+      node.min = value;
+    } else {
+      node.min = value < node.next?.min ? value : node.next?.min;
+    }
   }
 
   /**
@@ -67,6 +70,46 @@ export class Stack<T> implements IStack<T> {
   }
 
   /**
+   * Возвращает минимальное значение стека O(1).
+   * @returns Значение минимального элемента или undefined, если стек пуст.
+   */
+  min(): T | null {
+    if (!this.head) return null;
+    return this.head?.min;
+  }
+
+  sort() {
+    const tmp = new Stack();
+
+    while (!this.isEmpty()) {
+      const item = this.pop();
+      if (!tmp.head) {
+        tmp.add(item?.value);
+        continue;
+      }
+
+      while (item && item?.value > tmp.head?.value && !tmp.isEmpty()) {
+        this.add(tmp.pop()?.value);
+      }
+
+      tmp.add(item?.value);
+    }
+
+    return tmp;
+  }
+
+  pop() {
+    const head = this.head;
+    if (!head) return null;
+    this.head = head.next;
+    return head;
+  }
+
+  isEmpty() {
+    return this.head === null;
+  }
+
+  /**
    * Очищает стек.
    */
   clear(): void {
@@ -74,14 +117,13 @@ export class Stack<T> implements IStack<T> {
   }
 }
 
-const stack = new Stack();
+const st = new Stack();
 
-stack.add(1)
-stack.add(2)
-stack.add(3)
-stack.add(4)
+st.add(2);
+st.add(1);
+st.add(3);
+st.add(2);
+st.add(7);
+st.add(5);
 
-console.log(stack.get())
-console.log(stack.get())
-console.log(stack.get())
-console.log(stack.get())
+console.log(st.sort());
