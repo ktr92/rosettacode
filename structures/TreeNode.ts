@@ -1,4 +1,4 @@
-import { ITreeNode } from "../types/tree.type";
+import { ITreeNode } from "../../types/tree.type";
 
 /**
  * Узел бинарного дерева с двумя дочерними узлами и методом getValue().

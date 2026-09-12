@@ -1,4 +1,4 @@
-import { Node, IDoublyLinkedList } from "../types/linkedList.type"
+import { Node, IDoublyLinkedList } from "../../types/linkedList.type"
 
 /**
  * Двусвязный список с операциями вставки в начало/конец и удаления из начала/конца.

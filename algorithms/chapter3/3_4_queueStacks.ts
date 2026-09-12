@@ -73,3 +73,39 @@ export class Stack<T> implements IStack<T> {
     this.head = null;
   }
 }
+
+export class QueueStack<T> {
+
+ private newest: Stack<T> = new Stack();
+ private oldest: Stack<T> = new Stack();
+
+ push(value: T) {
+  this.newest.add(value)
+ }
+ 
+ pop() {
+  while (this.newest.head !== null) {
+   this.oldest.add(this.newest.head.value)
+   this.newest.head = this.newest.head.next;
+  }
+
+  return this.oldest.get()
+ }
+
+ isEmpty() {
+  if (!this.newest.head) return true;
+  return false;
+ }
+}
+
+const queue = new QueueStack();
+
+queue.push(1)
+queue.push(2)
+queue.push(3)
+queue.push(4)
+
+console.log(queue.pop())
+console.log(queue.pop())
+console.log(queue.pop())
+console.log(queue.pop())

@@ -1,7 +1,7 @@
 import Tree from "./Tree";
 import TreeNode from "./TreeNode";
 import BinaryTreeNode from "./BinaryTreeNode";
-import { NodeValue, isTreeNode, isBinaryTreeNode } from "../types/tree.type"
+import { NodeValue, isTreeNode, isBinaryTreeNode } from "../../types/tree.type"
 
 /**
  * Обход дерева в ширину (BFS) с совместимым поведением для TreeNode и BinaryTreeNode.
