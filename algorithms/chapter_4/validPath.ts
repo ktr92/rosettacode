@@ -18,56 +18,34 @@ function validPath(
   source: number,
   destination: number,
 ): boolean {
-  const toAdjacencyList = (bi: boolean) => {
-    const list: number[][] = [];
-    for (let i = 0; i < edges.length; i++) {
-      const v = edges[i]![0] as number;
-      const e = edges[i]![1] as number;
+  let bi = true;
+  const adjacents: number[][] = Array.from({ length: n }, () => []);
 
-      if (typeof list[v] !== "undefined") {
-        list[v].push(e);
-      } else {
-        list[v] = [];
-        list[v].push(e)
-      }
-
-      if (bi) {
-        if (typeof list[e] !== "undefined") {
-        list[e].push(v);
-      } else {
-        list[e] = [];
-        list[e].push(v)
-      }
-      }
+  for (const [u, v] of edges) {
+    adjacents[u].push(v);
+    if (bi) {
+      adjacents[v].push(u);
     }
-    return list;
-  };
-  const visited: boolean[] = [];
-  const visit = (value: number) => {
-    if (visited[value]) return;
-    visited[value] = true;
-  };
+  }
 
-  const adjacents = toAdjacencyList(true);
+  const visited = new Set<number>();
+
   const queue = [];
 
   // посещаем старторвый узел
   queue.push(source);
-  visit(source);
+  visited.add(source);
 
-  while (queue.length) {
+  while (queue.length > 0) {
     // извлекаем первый узел
-    const val = queue.shift();
+    const val = queue.shift() as number;
     // проверка на искомое значение
     if (val === destination) return true;
-    // помечаем как посещенный
-    visit(val);
     // добавляем в очередь все узлы с которыми связан текущий
-    if (adjacents[val]) {
-      for (let i = 0; i < adjacents[val].length; i++) {
-       if (visited[adjacents[val][i]]) continue
-        queue.push(adjacents[val][i]);
-      }
+    for (let neighbor of adjacents[val]!) {
+      if (visited.has(neighbor)) continue;
+      queue.push(neighbor);
+      visited.add(neighbor)
     }
   }
 
