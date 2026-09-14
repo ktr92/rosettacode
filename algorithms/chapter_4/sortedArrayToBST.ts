@@ -10,14 +10,17 @@ export class TreeNode {
 }
 
 export function sortedArrayToBST(nums: number[]): TreeNode | null {
- let left = 0;
- let right = nums.length - 1;
 
- if (!nums.length) return null;
- if (left > right) return null
+  const next = (start: number, end: number) => {
+    if (start > end) return null;
 
- const mid = Math.floor((left + right) / 2);
- const root = new TreeNode(nums[mid], sortedArrayToBST(nums), sortedArrayToBST(nums));
+    const mid = Math.floor((start + end) / 2);
+    const root = new TreeNode(nums[mid], null, null);
 
- return root
+    root.left = next(start, mid - 1)
+    root.right = next(mid + 1, end)
+    return root
+}
+
+  return next(0, nums.length - 1);
 }

@@ -30,7 +30,7 @@ describe('sortedArrayToBST (LeetCode style tests)', () => {
     test('Пример 1 из LeetCode', () => {
         // Исходный массив: [-10, -3, 0, 5, 9]
         const nums: number[] = [-10, -3, 0, 5, 9];
-        // Наша реализация с Math.floor((left + right) / 2) строит именно такой массив:
+        //  реализация с Math.floor((left + right) / 2) строит именно такой массив:
         const expected: (number | null)[] = [0, -3, 9, -10, null, 5];
 
         const root = sortedArrayToBST(nums);
