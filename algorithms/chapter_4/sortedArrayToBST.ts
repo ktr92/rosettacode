@@ -17,7 +17,10 @@ export function sortedArrayToBST(nums: number[]): TreeNode | null {
  if (left > right) return null
 
  const mid = Math.floor((left + right) / 2);
- const root = new TreeNode(nums[mid], sortedArrayToBST(nums), sortedArrayToBST(nums));
+ 
+ const root = new TreeNode(nums[mid], null, null);
+ root.left = sortedArrayToBST(nums)
+ root.right = sortedArrayToBST(nums)
 
  return root
 }
