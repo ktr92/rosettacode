@@ -1,6 +1,6 @@
 // BinaryTreeNode.ts
 
-import { IBinaryTreeNode } from './types/binaryTreeNode.type'
+import { IBinaryTreeNode } from '../types/binaryTreeNode.type'
 
 /**
  * Узел бинарного дерева с двумя дочерними узлами.
