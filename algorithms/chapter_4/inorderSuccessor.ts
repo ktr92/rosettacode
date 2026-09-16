@@ -17,6 +17,30 @@ class Node {
   }
 }
 
+class TreeFactory {
+  static createTree(arr: Array<number | null>) {
+
+   const root = new Node(arr[0] as number);
+   const nodesMap = new Map<number, Node>();
+
+   let left = null;
+   let right = null;
+   let node = root;
+
+   while (arr.length) {
+     node.left = new Node(arr.shift() as number);
+     node.right = new Node(arr.shift() as number);
+
+     node = node.left;
+   }
+
+   return {
+    root, nodesMap
+   }
+   
+  }
+}
+
 function inorderSuccessor(node: Node | null): Node | null {
   if (!node) return null;
 
@@ -27,13 +51,13 @@ function inorderSuccessor(node: Node | null): Node | null {
   }
 
   if (node.parent && node.parent.val < val) {
-    if (!node.left) return node.right;
+    if (!node.right) return null;
   }
 
   function findDiff(node: Node | null, prev: number) {
     if (!node) return null;
 
-    if (!node.right) return prev;
+    if (!node.right) return node.parent;
 
 
     return node;
@@ -42,17 +66,23 @@ function inorderSuccessor(node: Node | null): Node | null {
   return findDiff(node, Infinity);
 }
 
-const root = new Node(2, new Node(1, null, null), new Node(3, null, null)); // node = 1 -> 2
+// 1. Данные из Примера 3 на LeetCode
+const arrayRepresentation = [15, 6, 18, 3, 7, 17, 20, 2, 4, null, 13, null, null, null, null, null, null, null, null, 9];
 
-const root4 = new Node(
-  5,
-  new Node(
-    3,
-    new Node(2, new Node(1, null, null), null),
-    new Node(4, null, null),
-  ),
-  new Node(6),
-); // node = 6 -> null
+// 2. Генерируем дерево в памяти со всеми parent-ссылками
+const { root, nodesMap } = TreeFactory.createTree(arrayRepresentation);
 
-console.log(inorderSuccessor(root));
-console.log(inorderSuccessor(root4));
+// 3. Достаем из нашей карты узел, который хотим передать на вход функции
+// Например, по условию Примера 5, нам нужно найти следующий для узла со значением 9
+const nodeToTest = nodesMap.get(9); 
+
+if (nodeToTest) {
+    // 4. Вызываем  функцию 
+    const nextNode = inorderSuccessor(nodeToTest);
+    
+    // 5. Проверяем результат
+    console.log(`Для узла 9 следующий узел: ${nextNode ? nextNode.val : "null"}`);
+    // Ожидаемый вывод: Для узла 9 следующий узел: 13
+} else {
+    console.log("Узел не найден в дереве!");
+}
