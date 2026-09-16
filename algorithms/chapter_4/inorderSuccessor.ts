@@ -1,6 +1,5 @@
 import { Node, TreeFactory } from "../../structures/TreeFactory";
 
-
 function inorderSuccessor(node: Node | null): Node | null {
   if (!node) return null;
 
@@ -9,14 +8,32 @@ function inorderSuccessor(node: Node | null): Node | null {
   function findDiff(node: Node | null, prev: number) {
     if (!node) return null;
 
-    if (!node.right) return node.parent;
+    if (node.val > node.parent?.val && !node.right) return null;
+
+    if (node.val < node.parent?.val && !node.right) {
+      return node.parent?.parent ?? null;
+    }
+
+    // go to right, then left
 
     return node;
   }
 
   return findDiff(node, Infinity);
 }
-
+/*
+               50
+             /    \
+           25      75
+          /  \    /  \
+         12  35  60  85
+            /  \
+           30  40
+          /
+         28
+        /
+       29
+*/
 // 1. Данные из Примера 3 на LeetCode
 const arrayRepresentation = [
   50,
@@ -54,7 +71,9 @@ if (nodeToTest) {
   const nextNode = inorderSuccessor(nodeToTest);
 
   // 5. Проверяем результат
-  console.log(`Для узла 29 следующий узел: ${nextNode ? nextNode.val : "null"}`);
+  console.log(
+    `Для узла 29 следующий узел: ${nextNode ? nextNode.val : "null"}`,
+  );
   // Ожидаемый вывод: Для узла 29 следующий узел: 30
 } else {
   console.log("Узел не найден в дереве!");
