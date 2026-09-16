@@ -17,6 +17,18 @@ class Node {
   }
 }
 
+
+// [15, 6, 18, 3, 7, 17, 20, 2, 4, null, 13, null, null, null, null, null, null, null, null, 9];
+//  
+//          15
+//        /    \
+//       6      18
+//      / \    /  \
+//     3   7  17  20
+//    / \   \
+//   2   4  13
+//         /
+//        9
 class TreeFactory {
   static createTree(arr: Array<number | null>) {
 
@@ -28,10 +40,18 @@ class TreeFactory {
    let node = root;
 
    while (arr.length) {
-     node.left = new Node(arr.shift() as number);
-     node.right = new Node(arr.shift() as number);
+     node.left = new Node(arr.shift()!);
+     node.right = new Node(arr.shift()!);
 
-     node = node.left;
+     node.left.left = new Node(arr.shift()!);
+     node.left.right = new Node(arr.shift()!);
+
+     node.right.left = new Node(arr.shift() as number);
+     node.right.right = new Node(arr.shift() as number);
+
+     node.left.left.left = new Node(arr.shift() as number);
+     node.left.left.right = new Node(arr.shift() as number);
+     
    }
 
    return {
@@ -71,6 +91,8 @@ const arrayRepresentation = [15, 6, 18, 3, 7, 17, 20, 2, 4, null, 13, null, null
 
 // 2. Генерируем дерево в памяти со всеми parent-ссылками
 const { root, nodesMap } = TreeFactory.createTree(arrayRepresentation);
+
+console.log(root)
 
 // 3. Достаем из нашей карты узел, который хотим передать на вход функции
 // Например, по условию Примера 5, нам нужно найти следующий для узла со значением 9
