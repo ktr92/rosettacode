@@ -17,7 +17,7 @@ function isValidBST(root: TreeNode | null): boolean {
     if ((max !== null && node.val >= max) || (min !== null && node.val <= min)) return false;
 
 
-    if (!checkNode(node.left, node.val,  min, ) || !checkNode(node.right, max, node.val)) {
+    if (!checkNode(node.left, node.val,  min) || !checkNode(node.right, max, node.val)) {
      return false
     }
 
