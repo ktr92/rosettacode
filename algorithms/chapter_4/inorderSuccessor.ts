@@ -18,23 +18,28 @@ class Node {
 }
 
 function inorderSuccessor(node: Node | null): Node | null {
-  const val = node?.val;
+  if (!node) return null;
 
-  function findDiff(node: Node | null, prevDiff: number) {
+  const val = node.val;
+
+  if (node.parent && node.parent.val > val) {
+    if (!node.right) return node.parent;
+  }
+
+  if (node.parent && node.parent.val < val) {
+    if (!node.left) return node.right;
+  }
+
+  function findDiff(node: Node | null, prev: number) {
     if (!node) return null;
 
-    if (node?.parent?.val > node?.val) {
-      if (!node.right) return node.parent;
-    }
+    if (!node.right) return prev;
 
-    if (node?.parent?.val < node?.val) {
-     if (!node.left) return node.right;
-    }
 
     return node;
   }
 
-  return findDiff(node, 0)
+  return findDiff(node, Infinity);
 }
 
 const root = new Node(2, new Node(1, null, null), new Node(3, null, null)); // node = 1 -> 2
