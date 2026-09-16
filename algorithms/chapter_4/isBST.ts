@@ -11,14 +11,20 @@ class TreeNode {
 
 function isValidBST(root: TreeNode | null): boolean {
 
-  function checkNode(node: TreeNode | null, limit: number): boolean {
+  function checkNode(node: TreeNode | null, max: number | null, min: number | null): boolean {
     if (node === null) return true;
+   
+    if ((max !== null && node.val >= max) || (min !== null && node.val <= min)) return false;
 
+
+    if (!checkNode(node.left, node.val,  min, ) || !checkNode(node.right, max, node.val)) {
+     return false
+    }
 
     return true;
   }
 
-  return checkNode(root, root ? root.val : 0);
+  return checkNode(root, null, null);
 }
 
 const root = new TreeNode(
