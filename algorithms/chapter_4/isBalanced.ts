@@ -27,7 +27,7 @@ function isBalanced(root: TreeNode | null): boolean {
   return postOrderTraversal(root) !== -1;
 }
 
-const root = new TreeNode(
+/* const root = new TreeNode(
   3,
   new TreeNode(9, null, null),
   new TreeNode(20, new TreeNode(15), new TreeNode(7)),
@@ -47,4 +47,4 @@ const root2 = new TreeNode(
 );
 
 console.log(isBalanced(root));
-console.log(isBalanced(root2));
+console.log(isBalanced(root2)); */
