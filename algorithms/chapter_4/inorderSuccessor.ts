@@ -17,9 +17,8 @@ class Node {
   }
 }
 
-
 // [15, 6, 18, 3, 7, 17, 20, 2, 4, null, 13, null, null, null, null, null, null, null, null, 9];
-//  
+//
 //          15
 //        /    \
 //       6      18
@@ -29,35 +28,63 @@ class Node {
 //   2   4  13
 //         /
 //        9
+
 class TreeFactory {
-  static createTree(arr: Array<number | null>) {
+  /**
+   * Строит дерево из массива LeetCode и возвращает:
+   * 1. root - корень всего дерева
+   * 2. nodesMap - Map, где ключ — это значение Node.val, а значение — сам объект Node.
+   *    Это нужно, чтобы вы могли легко достать и передать в тест любой узел по его числу.
+   */
+  static createTree(arr: (number | null)[]): {
+    root: Node | null;
+    nodesMap: Map<number, Node>;
+  } {
+    if (arr.length === 0 || arr[0] === null) {
+      return { root: null, nodesMap: new Map() };
+    }
 
-   const root = new Node(arr[0] as number);
-   const nodesMap = new Map<number, Node>();
+    const nodesMap = new Map<number, Node>();
 
-   let left = null;
-   let right = null;
-   let node = root;
+    // Создаем корень
+    const root = new Node(arr[0]);
+    nodesMap.set(root.val, root);
 
-   while (arr.length) {
-     node.left = new Node(arr.shift()!);
-     node.right = new Node(arr.shift()!);
+    // Очередь для BFS хранит узлы, чьих детей мы сейчас будем искать
+    const queue: Node[] = [root];
+    let i = 1; // Указатель на текущий элемент в массиве arr
 
-     node.left.left = new Node(arr.shift()!);
-     node.left.right = new Node(arr.shift()!);
+    while (queue.length > 0 && i < arr.length) {
+      const current = queue.shift()!;
 
-     node.right.left = new Node(arr.shift() as number);
-     node.right.right = new Node(arr.shift() as number);
+      // 1. Обрабатываем левого ребенка
+      if (i < arr.length && arr[i] !== null) {
+        const leftVal = arr[i]!;
+        const leftNode = new Node(leftVal);
 
-     node.left.left.left = new Node(arr.shift() as number);
-     node.left.left.right = new Node(arr.shift() as number);
-     
-   }
+        current.left = leftNode; // Связь: родитель -> левый
+        leftNode.parent = current; //  связь левый -> родитель
 
-   return {
-    root, nodesMap
-   }
-   
+        nodesMap.set(leftVal, leftNode);
+        queue.push(leftNode);
+      }
+      i++;
+
+      // 2. Обрабатываем правого ребенка
+      if (i < arr.length && arr[i] !== null) {
+        const rightVal = arr[i]!;
+        const rightNode = new Node(rightVal);
+
+        current.right = rightNode; // Связь: родитель -> правый
+        rightNode.parent = current; // связь правый -> родитель
+
+        nodesMap.set(rightVal, rightNode);
+        queue.push(rightNode);
+      }
+      i++;
+    }
+
+    return { root, nodesMap };
   }
 }
 
@@ -66,19 +93,11 @@ function inorderSuccessor(node: Node | null): Node | null {
 
   const val = node.val;
 
-  if (node.parent && node.parent.val > val) {
-    if (!node.right) return node.parent;
-  }
-
-  if (node.parent && node.parent.val < val) {
-    if (!node.right) return null;
-  }
 
   function findDiff(node: Node | null, prev: number) {
     if (!node) return null;
 
     if (!node.right) return node.parent;
-
 
     return node;
   }
@@ -87,24 +106,24 @@ function inorderSuccessor(node: Node | null): Node | null {
 }
 
 // 1. Данные из Примера 3 на LeetCode
-const arrayRepresentation = [15, 6, 18, 3, 7, 17, 20, 2, 4, null, 13, null, null, null, null, null, null, null, null, 9];
+const arrayRepresentation = [50, 25, 75, 12, 35, 60, 85, null, null, 30, 40, null, null, null, null, 28, null, null, null, 29];
 
 // 2. Генерируем дерево в памяти со всеми parent-ссылками
 const { root, nodesMap } = TreeFactory.createTree(arrayRepresentation);
 
-console.log(root)
+console.log(root);
 
 // 3. Достаем из нашей карты узел, который хотим передать на вход функции
 // Например, по условию Примера 5, нам нужно найти следующий для узла со значением 9
-const nodeToTest = nodesMap.get(9); 
+const nodeToTest = nodesMap.get(29);
 
 if (nodeToTest) {
-    // 4. Вызываем  функцию 
-    const nextNode = inorderSuccessor(nodeToTest);
-    
-    // 5. Проверяем результат
-    console.log(`Для узла 9 следующий узел: ${nextNode ? nextNode.val : "null"}`);
-    // Ожидаемый вывод: Для узла 9 следующий узел: 13
+  // 4. Вызываем  функцию
+  const nextNode = inorderSuccessor(nodeToTest);
+
+  // 5. Проверяем результат
+  console.log(`Для узла 29 следующий узел: ${nextNode ? nextNode.val : "null"}`);
+  // Ожидаемый вывод: Для узла 29 следующий узел: 30
 } else {
-    console.log("Узел не найден в дереве!");
+  console.log("Узел не найден в дереве!");
 }
