@@ -72,7 +72,7 @@ if (nodeToTest) {
 
   // 5. Проверяем результат
   console.log(
-    `Для узла 29 следующий узел: ${nextNode ? nextNode.val : "null"}`,
+    `Для узла ${nodeToTest.val} следующий узел: ${nextNode ? nextNode.val : "null"}`,
   );
   // Ожидаемый вывод: Для узла 29 следующий узел: 30
 } else {
