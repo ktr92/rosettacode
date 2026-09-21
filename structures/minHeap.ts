@@ -44,7 +44,6 @@ export class MinHeap {
       index = parentIndex;
       parentIndex = this.getParentIndex(index);
     } 
-    console.log(this.heap)
   }
 
   private siftDown(index: number) {
