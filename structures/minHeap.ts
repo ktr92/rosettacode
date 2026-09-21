@@ -4,8 +4,7 @@ export class MinHeap {
 
   public insert(value: number) {
     this.heap.push(value);
-    this.siftUp(value, this.heap.length - 1);
-    console.log(this.heap)
+    this.siftUp(this.heap.length - 1);
   }
 
   private getParentIndex(index: number) {
@@ -19,60 +18,62 @@ export class MinHeap {
   }
 
   public extractMin() {
-    const min = this.heap.shift();
+    const root = this.heap[0];
 
-    const newRoot = this.heap.pop();
+    if (this.heap.length > 1) {
+      this.heap[0] = this.heap.pop();
+      this.siftDown(0);
+    }
+    
 
-    if (!newRoot) return min;
-
-    this.heap.unshift(newRoot);
-
-    this.siftDown(0);
-
-    return min;
+    return root;
   }
 
-  // Получить текущий размер кучи
   public size(): number {
     return this.heap.length;
   }
 
-  // Посмотреть минимум без удаления O(1)
   public peek(): number | null {
     return this.heap[0] ?? null;
   }
 
-  private siftUp(value: number, index: number) {
-    let parent = this.heap[this.getParentIndex(index)];
-    if (typeof parent !== "undefined" && value < parent) {
-      [parent, value] = [value, parent];
-    }
+  private siftUp(index: number) {
+    let parentIndex = this.getParentIndex(index);
+    while (this.heap[index] < this.heap[parentIndex]) {
+      [this.heap[parentIndex], this.heap[index]] = [this.heap[index], this.heap[parentIndex]];
+      index = parentIndex;
+      parentIndex = this.getParentIndex(index);
+    } 
+    console.log(this.heap)
   }
 
   private siftDown(index: number) {
-    let leftChildIndex = this.getLeftChildIndex(index);
-    let rightChildIndex = this.getRightChildIndex(index);
 
-    let leftChild = this.heap[leftChildIndex];
-    let rightChild = this.heap[rightChildIndex];
     let current = index;
 
-    while (
-      this.heap[current] > this.heap[leftChild] ||
-      this.heap[current] > this.heap[rightChild]
-    ) {
-      if (this.heap[current] > leftChild) {
-        [leftChild, this.heap[current]] = [this.heap[current], leftChild];
-        current = leftChild;
-      } else if (this.heap[current] > rightChild) {
-        [rightChild, this.heap[current]] = [this.heap[current], rightChild];
+    while (true) {
+      let leftIdx = this.getLeftChildIndex(current);
+      let rightIdx = this.getRightChildIndex(current);
+      let smallestIdx = current;
+
+      // 1. Проверяем, существует ли левый потомок и меньше ли он текущего
+      if (leftIdx < this.heap.length && this.heap[leftIdx] < this.heap[smallestIdx]) {
+        smallestIdx = leftIdx;
       }
 
-      leftChildIndex = this.heap[this.getLeftChildIndex(current)];
-      rightChildIndex = this.heap[this.getRightChildIndex(current)];
+      // 2. Проверяем, существует ли правый потомок и меньше ли он, чем текущий/левый
+      if (rightIdx < this.heap.length && this.heap[rightIdx] < this.heap[smallestIdx]) {
+        smallestIdx = rightIdx;
+      }
 
-      leftChild = this.heap[leftChildIndex];
-      rightChild = this.heap[rightChildIndex];
+      // Если наименьшим остался сам current, значит инвариант кучи соблюден — выходим
+      if (smallestIdx === current) {
+        break;
+      }
+
+      [this.heap[current], this.heap[smallestIdx]] = [this.heap[smallestIdx], this.heap[current]];
+       current = smallestIdx;
+
     }
   }
 }
