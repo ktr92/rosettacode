@@ -3,36 +3,44 @@ import { Node, TreeFactory } from "../../structures/TreeFactory";
 function inorderSuccessor(node: Node | null): Node | null {
   if (!node) return null;
 
-  const val = node.val;
+  function goRightLeft(node: Node) {
+    let current = node.right;
 
-  function findDiff(node: Node | null, prev: number) {
-    if (!node) return null;
-
-    if (node.val > node.parent?.val && !node.right) return null;
-
-    if (node.val < node.parent?.val && !node.right) {
-      return node.parent?.parent ?? null;
+    while (current && current.left) {
+      current = current.left;
     }
 
-    // go to right, then left
-
-    return node;
+    return current;
   }
 
-  return findDiff(node, Infinity);
+  function goParent(node: Node) {
+    let current = node.parent;
+    let prev = node;
+    while (current && current.left !== prev) {
+      prev = current;
+      current = current.parent;
+    }
+    return current;
+  }
+
+  if (node.right !== null) {
+    return goRightLeft(node);
+  } else {
+    return goParent(node);
+  }
 }
 /*
-               50
+                50
              /    \
            25      75
           /  \    /  \
-         12  35  60  85
+        12   35  60  85
             /  \
-           30  40
-          /
-         28
-        /
-       29
+          30    40
+         /
+       28
+         \
+          29
 */
 // 1. Данные из Примера 3 на LeetCode
 const arrayRepresentation = [
@@ -77,4 +85,44 @@ if (nodeToTest) {
   // Ожидаемый вывод: Для узла 29 следующий узел: 30
 } else {
   console.log("Узел не найден в дереве!");
+}
+
+const nodeToTest1 = nodesMap.get(25);
+
+if (nodeToTest1) {
+  const nextNode = inorderSuccessor(nodeToTest1);
+  console.log(
+    `Тест 1: Для узла ${nodeToTest1.val} следующий узел: ${nextNode ? nextNode.val : "null"}`,
+  );
+  // Ожидаемый вывод: Для узла 25 следующий узел: 28
+}
+
+const nodeToTest2 = nodesMap.get(85);
+
+if (nodeToTest2) {
+  const nextNode = inorderSuccessor(nodeToTest2);
+  console.log(
+    `Тест 2: Для узла ${nodeToTest2.val} следующий узел: ${nextNode ? nextNode.val : "null"}`,
+  );
+  // Ожидаемый вывод: Для узла 85 следующий узел: null
+}
+
+const nodeToTest3 = nodesMap.get(12);
+
+if (nodeToTest3) {
+  const nextNode = inorderSuccessor(nodeToTest3);
+  console.log(
+    `Тест 3: Для узла ${nodeToTest3.val} следующий узел: ${nextNode ? nextNode.val : "null"}`,
+  );
+  // Ожидаемый вывод: Для узла 12 следующий узел: 25
+}
+
+const nodeToTest4 = nodesMap.get(40);
+
+if (nodeToTest4) {
+  const nextNode = inorderSuccessor(nodeToTest4);
+  console.log(
+    `Тест 4: Для узла ${nodeToTest4.val} следующий узел: ${nextNode ? nextNode.val : "null"}`,
+  );
+  // Ожидаемый вывод: Для узла 40 следующий узел: 50
 }
