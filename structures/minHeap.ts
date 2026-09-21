@@ -3,34 +3,38 @@ import { IBinaryTreeNode } from "./../types/binaryTreeNode.type";
 export class MinHeap {
   private heap: number[] = [];
 
-  insert(value: number) {
+  public insert(value: number) {
     this.heap.push(value);
     this.siftUp(value, this.heap.length - 1);
   }
 
-  getParentIndex(index: number) {
+  private getParentIndex(index: number) {
     return Math.floor((index - 1) / 2);
   }
-  getLeftChildIndex(index: number) {
+  private getLeftChildIndex(index: number) {
     return 2 * index + 1;
   }
-  getRightChildIndex(index: number) {
+  private getRightChildIndex(index: number) {
     return 2 * index + 2;
   }
 
-  extractMin() {
-   const min = this.heap.shift();  
+  public extractMin() {
+    const min = this.heap.shift();
 
-   const newRoot = this.heap.pop();
+    const newRoot = this.heap.pop();
 
-   if (!newRoot) return min;
-   
-   this.heap.unshift(newRoot);
+    if (!newRoot) return min;
 
-   this.siftDown(0)
+    this.heap.unshift(newRoot);
 
-   return min;
+    this.siftDown(0);
 
+    return min;
+  }
+
+  // Получить текущий размер кучи
+  public size(): number {
+    return this.heap.length;
   }
 
   // Посмотреть минимум без удаления O(1)
@@ -38,18 +42,20 @@ export class MinHeap {
     return this.heap[0] ?? null;
   }
 
-  siftUp(value: number, index: number) {
+  private siftUp(value: number, index: number) {
     let parent = this.heap[this.getParentIndex(index)];
     if (typeof parent !== "undefined" && value < parent) {
       [parent, value] = [value, parent];
     }
   }
 
-  siftDown(index: number) {
-   let leftChild = this.heap[this.getLeftChildIndex(index)];
-   let rightChild = this.heap[this.getRightChildIndex(index)];
+  private siftDown(index: number) {
+    let leftChild = this.heap[this.getLeftChildIndex(index)];
+    let rightChild = this.heap[this.getRightChildIndex(index)];
 
-   
+    if (this.heap[index] > leftChild) {
+      [leftChild, this.heap[index]] = [this.heap[index], leftChild];
+    }
   }
 }
 
