@@ -1,4 +1,3 @@
-import { IBinaryTreeNode } from "./../types/binaryTreeNode.type";
 
 export class MinHeap {
   private heap: number[] = [];
@@ -6,6 +5,7 @@ export class MinHeap {
   public insert(value: number) {
     this.heap.push(value);
     this.siftUp(value, this.heap.length - 1);
+    console.log(this.heap)
   }
 
   private getParentIndex(index: number) {
@@ -50,11 +50,29 @@ export class MinHeap {
   }
 
   private siftDown(index: number) {
-    let leftChild = this.heap[this.getLeftChildIndex(index)];
-    let rightChild = this.heap[this.getRightChildIndex(index)];
+    let leftChildIndex = this.getLeftChildIndex(index);
+    let rightChildIndex = this.getRightChildIndex(index);
 
-    if (this.heap[index] > leftChild) {
-      [leftChild, this.heap[index]] = [this.heap[index], leftChild];
+    let leftChild = this.heap[leftChildIndex];
+    let rightChild = this.heap[rightChildIndex];
+    let current = index;
+
+    while (
+      this.heap[current] > this.heap[leftChild] ||
+      this.heap[current] > this.heap[rightChild]
+    ) {
+      if (this.heap[current] > leftChild) {
+        [leftChild, this.heap[current]] = [this.heap[current], leftChild];
+        current = leftChild;
+      } else if (this.heap[current] > rightChild) {
+        [rightChild, this.heap[current]] = [this.heap[current], rightChild];
+      }
+
+      leftChildIndex = this.heap[this.getLeftChildIndex(current)];
+      rightChildIndex = this.heap[this.getRightChildIndex(current)];
+
+      leftChild = this.heap[leftChildIndex];
+      rightChild = this.heap[rightChildIndex];
     }
   }
 }
