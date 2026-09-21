@@ -1,67 +1,52 @@
 export class Node {
   val: number;
-  left: Node | null;
-  right: Node | null;
-  parent: Node | null;
+  left: Node | null = null;
+  right: Node | null = null;
+  parent: Node | null = null;
 
-  constructor(
-    val?: number,
-    left?: Node | null,
-    right?: Node | null,
-    parent?: Node | null,
-  ) {
-    this.val = val ?? 0;
-    this.left = left ?? null;
-    this.right = right ?? null;
-    this.parent = parent ?? null;
+  constructor(val: number) {
+    this.val = val;
   }
 }
 
 export class TreeFactory {
-  /**
-   * Строит дерево из массива LeetCode.
-   * ВНИМАНИЕ: Если в дереве есть дубликаты val, nodesMap вернет последний обработанный узел.
-   */
-  static createTree(
-    arr: (number | null)[],
-    parentLink: boolean = false,
-  ): { root: Node | null; nodesMap: Map<number, Node> } {
-    if (arr.length === 0 || arr[0] === null) {
-      return { root: null, nodesMap: new Map() };
-    }
-
+  static createTree(arr: (number | null)[]): { root: Node | null; nodesMap: Map<number, Node> } {
     const nodesMap = new Map<number, Node>();
+    if (arr.length === 0 || arr[0] === null) return { root: null, nodesMap };
+
     const root = new Node(arr[0]);
     nodesMap.set(root.val, root);
-    
-    const queue: Node[] = [root];
-    let p = 1;
 
-    while (queue.length > 0 && p < arr.length) {
-      const current = queue.shift()!;
-
-      // Левый ребенок
-      if (p < arr.length) {
-        const leftVal = arr[p];
-        if (leftVal !== null && leftVal !== undefined) {
-          current.left = new Node(leftVal);
-          if (parentLink) current.left.parent = current;
-          queue.push(current.left);
-          nodesMap.set(leftVal, current.left);
+    // Функция чистой BST-вставки с гарантированным сохранением parent-ссылок
+    function insert(root: Node, val: number): Node {
+      let current = root;
+      while (true) {
+        if (val < current.val) {
+          if (current.left === null) {
+            const newNode = new Node(val);
+            newNode.parent = current;
+            current.left = newNode;
+            return newNode;
+          }
+          current = current.left;
+        } else {
+          if (current.right === null) {
+            const newNode = new Node(val);
+            newNode.parent = current;
+            current.right = newNode;
+            return newNode;
+          }
+          current = current.right;
         }
-        p++;
       }
+    }
 
-      // Правый ребенок
-      if (p < arr.length) {
-        const rightVal = arr[p];
-        if (rightVal !== null && rightVal !== undefined) {
-          current.right = new Node(rightVal);
-          if (parentLink) current.right.parent = current;
-          queue.push(current.right);
-          nodesMap.set(rightVal, current.right);
-        }
-        p++;
+    // Вставляем все числовые значения строго по порядку
+    for (let i = 1; i < arr.length; i++) {
+      const val = arr[i];
+      if (val !== null && val !== undefined) {
+        const newNode = insert(root, val);
+        nodesMap.set(val, newNode);
       }
     }
 

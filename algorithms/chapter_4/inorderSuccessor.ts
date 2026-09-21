@@ -5,11 +5,9 @@ function inorderSuccessor(node: Node | null): Node | null {
 
   function goRightLeft(node: Node) {
     let current = node.right;
-
-    while (current && current.left) {
+    while (current?.left) {
       current = current.left;
     }
-
     return current;
   }
 
