@@ -17,32 +17,49 @@ Output: 3
 
 import { BinaryTreeNode, TreeFactory } from "../../structures/BTFactory";
 
-type TreeNode = BinaryTreeNode<number>; 
-export function lowestCommonAncestor(root: TreeNode | null, p: TreeNode | null, q: TreeNode | null): TreeNode | null {
+type TreeNode = BinaryTreeNode<number>;
+export function lowestCommonAncestor(
+  root: TreeNode | null,
+  p: TreeNode | null,
+  q: TreeNode | null,
+): TreeNode | null {
+  function findParents(target: TreeNode) {
+    const parents: number[] = [];
 
- function findNode(node: TreeNode, value: number) {
-  if (node?.value === value) {
-   return node
-  } 
-  if (node?.leftNode) {
-   return findNode(node.leftNode, value)
+    function findNode(node: TreeNode, value: number, parents: number[]) {
+      if (node.value === value) {
+        return;
+      }
+
+      if (node.leftNode === null && node.rightNode === null) {
+        return;
+      }
+
+      parents.push(node.value);
+      if (node?.rightNode) {
+        findNode(node.rightNode, value, parents);
+      }
+      if (node?.leftNode) {
+        findNode(node.leftNode, value, parents);
+      }
+      return parents;
+    }
+    findNode(root!, target!.value, parents);
+    return parents;
   }
-  if (node?.rightNode) {
-   return findNode(node.rightNode, value)
-  }
-  return null
- }
 
- const nodeP = findNode(root!, p!.value)
+  const pParents = findParents(p);
+  const qParents = findParents(q);
 
- return nodeP;
+  console.log(pParents, qParents);
+
+  return root;
 }
 
 const arrayRepresentation = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4];
-const p = new BinaryTreeNode(3);
+const p = new BinaryTreeNode(6);
 const q = new BinaryTreeNode(7);
 const root = TreeFactory.createTree(arrayRepresentation);
 const result = lowestCommonAncestor(root, p, q);
 
-console.log(root)
-console.log(result)
+console.log(result);
