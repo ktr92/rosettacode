@@ -10,6 +10,66 @@ function findOrder(numCourses: number, prerequisites: number[][]): number[] {
       .fill(0)
       .map((_, i) => i);
 
+  const dependsOnKey = new Map<number, Set<number>>();
+  const dependsOnValue = new Map<number, Set<number>>();
+
+  for (let i = 0; i < numCourses; i++) {
+    dependsOnKey.set(i, new Set<number>());
+    dependsOnValue.set(i, new Set<number>());
+  }
+
+  for (const [k, v] of prerequisites) {
+    dependsOnValue.get(k!)!.add(v!);
+  }
+
+  for (const [k, v] of prerequisites) {
+    dependsOnKey.get(v!)!.add(k!);
+  }
+
+  console.log(dependsOnValue);
+  console.log(dependsOnKey);
+
+  const taskQueue = [];
+  const dependsCount = [];
+  const result = [];
+
+  let current = 0;
+
+  for (const [k, v] of dependsOnValue) {
+    dependsCount[k] = dependsOnValue.get(k)?.size;
+  }
+
+  for (let i = 0; i < dependsCount; i++) {
+    if (dependsCount[i] === 0) {
+      current = i;
+      break;
+    }
+  }
+
+  taskQueue.push(current);
+
+  const next = dependsOnKey.get(current)
+  result.push(taskQueue.shift()!)
+  console.log('next: ', next)
+
+}
+
+console.log(
+  findOrder(4, [
+    [1, 0],
+    [2, 0],
+    [3, 1],
+    [3, 2],
+  ]),
+);
+console.log(findOrder(1, []));
+
+/* function findOrder(numCourses: number, prerequisites: number[][]): number[] {
+  if (!prerequisites.length)
+    return Array(numCourses)
+      .fill(0)
+      .map((_, i) => i);
+
   const dependecies = new Map<number, Set<number>>();
   const result = [];
 
@@ -45,14 +105,4 @@ function findOrder(numCourses: number, prerequisites: number[][]): number[] {
   if (result.length < numCourses) return [];
 
   return result;
-}
-
-console.log(
-  findOrder(4, [
-    [1, 0],
-    [2, 0],
-    [3, 1],
-    [3, 2],
-  ]),
-);
-console.log(findOrder(1, []));
+} */
