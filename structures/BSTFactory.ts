@@ -11,6 +11,8 @@ export class Node {
 
 export class TreeFactory {
   static createTree(arr: (number | null)[]): { root: Node | null; nodesMap: Map<number, Node> } {
+
+    // для доступа по узлу
     const nodesMap = new Map<number, Node>();
     if (arr.length === 0 || arr[0] === null) return { root: null, nodesMap };
 

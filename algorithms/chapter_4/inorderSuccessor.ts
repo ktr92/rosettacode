@@ -1,4 +1,4 @@
-import { Node, TreeFactory } from "../../structures/TreeFactory";
+import { Node, TreeFactory } from "../../structures/BSTFactory";
 
 function inorderSuccessor(node: Node | null): Node | null {
   if (!node) return null;
