@@ -26,32 +26,41 @@ function findOrder(numCourses: number, prerequisites: number[][]): number[] {
     dependsOnKey.get(v!)!.add(k!);
   }
 
-  console.log(dependsOnValue);
-  console.log(dependsOnKey);
+  // очередь задач готовых к выполнению
+  const taskQueue: number[] = [];
+  // количество входях ребер (зависимых задач для каждого индекса)
+  const dependsCount: number[] = [];
+  const result: number[] = [];
 
-  const taskQueue = [];
-  const dependsCount = [];
-  const result = [];
-
-  let current = 0;
-
-  for (const [k, v] of dependsOnValue) {
-    dependsCount[k] = dependsOnValue.get(k)?.size;
+  for (let i = 0; i < numCourses; i++) {
+    dependsCount[i] = dependsOnValue.get(i)?.size || 0;
   }
 
-  for (let i = 0; i < dependsCount; i++) {
+  for (let i = 0; i < dependsCount.length; i++) {
     if (dependsCount[i] === 0) {
-      current = i;
-      break;
+      taskQueue.push(i);
     }
   }
 
-  taskQueue.push(current);
+  let head = 0;
+  while (head < taskQueue.length) {
+    // извлекаю первый из очереди
+    let current = taskQueue[head++];
+    result.push(current);
 
-  const next = dependsOnKey.get(current)
-  result.push(taskQueue.shift()!)
-  console.log('next: ', next)
-
+    // какие зависят от current
+    const next = dependsOnKey.get(current);
+    // все зависящие уменьшить на 1
+    for (const value of next?.values()) {
+      dependsCount[value] = dependsCount[value] - 1;
+      // поместить в очередь все которые стали 0
+      if (dependsCount[value] === 0) {
+        taskQueue.push(value);
+      }
+    }
+    
+  }
+  return result.length === numCourses ? result : [];
 }
 
 console.log(
