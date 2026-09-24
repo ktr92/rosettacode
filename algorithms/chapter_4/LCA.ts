@@ -23,43 +23,48 @@ export function lowestCommonAncestor(
   p: TreeNode | null,
   q: TreeNode | null,
 ): TreeNode | null {
-  function findParents(target: TreeNode) {
-    const parents: number[] = [];
+  // DFS - ищем элемент, если нашли, то пробрасываем вверх
+  // если тупик, то элемента нет в этой ветке, возращаем null
+  if (root === null) return null;
 
-    function findNode(node: TreeNode, value: number, parents: number[]) {
-      if (node.value === value) {
-        return;
-      }
-
-      if (node.leftNode === null && node.rightNode === null) {
-        return;
-      }
-
-      parents.push(node.value);
-      if (node?.rightNode) {
-        findNode(node.rightNode, value, parents);
-      }
-      if (node?.leftNode) {
-        findNode(node.leftNode, value, parents);
-      }
-      return parents;
-    }
-    findNode(root!, target!.value, parents);
-    return parents;
+  // если элемент найден, то возвращаем его. 
+  // обход этой ветки завершен, и найденный узел ждет второго на этом уровне рекурсии
+  if (root === p || root === q) {
+    return root
   }
 
-  const pParents = findParents(p);
-  const qParents = findParents(q);
+  // ожидаем что сюда вернется либо узел p либо q, одновременно быть не может,
+  // т.к. мы идем по разным путям, а элементы все уникальные.  
+  const left = lowestCommonAncestor(root.leftNode, p, q);
+  const right = lowestCommonAncestor(root.rightNode, p, q);
+  
+  // если оба пути вернут значения, значит текущий узел (из которого вызвали) - и есть общий ancestor;
+  if (left !== null && right !== null) {
+    return root
+  }
 
-  console.log(pParents, qParents);
+  // возвращаем наверх тот который не null
+  return left !== null ? left : right;
 
-  return root;
+}
+
+// Вспомогательная функция для поиска ссылки на узел по его значению
+function findNodeByValue(root: TreeNode | null, val: number): TreeNode | null {
+  if (root === null) return null;
+  if (root.value === val) return root;
+  
+  const leftSearch = findNodeByValue(root.leftNode, val);
+  if (leftSearch !== null) return leftSearch;
+  
+  return findNodeByValue(root.rightNode, val);
 }
 
 const arrayRepresentation = [3, 5, 1, 6, 2, 0, 8, null, null, 7, 4];
-const p = new BinaryTreeNode(6);
-const q = new BinaryTreeNode(7);
+
 const root = TreeFactory.createTree(arrayRepresentation);
+
+const p = findNodeByValue(root, 6);
+const q = findNodeByValue(root, 7);
 const result = lowestCommonAncestor(root, p, q);
 
 console.log(result);
