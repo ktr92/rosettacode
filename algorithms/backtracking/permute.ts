@@ -36,10 +36,6 @@
     }
   }
 }
- * @param arr 
- * @param result 
- * @param i 
- * @returns 
  */
 
 function weave(
