@@ -28,6 +28,9 @@ function weave(
     return;
   }
 
+  // если можно делать перестановки, то let i = 0
+  // если нельзя повторять один и тот же элемент  weave(..., i + 1, ...)
+  // если можно повторять, но нужны уникальные комбинации let i = start; weave(..., i, ...)
   for (let i = start; i < nums.length; i++) {
     current.push(nums[i]);
 
