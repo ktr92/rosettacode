@@ -1,37 +1,48 @@
 /**
- * Дан массив уникальных целых чисел candidates и целевое число target. 
+ * Дан массив уникальных целых чисел candidates и целевое число target.
  * Напишите функцию, которая возвращает список всех уникальных комбинаций чисел, сумма которых равна target.
- * Главное правило: одно и то же число из массива candidates можно выбирать бесконечное количество раз. 
+ * Главное правило: одно и то же число из массива candidates можно выбирать бесконечное количество раз.
  * Но сами комбинации в результате должны быть уникальными (то есть [2, 2, 3] и [3, 2, 2] — это один и тот же дубликат, дважды выводить его нельзя).
- * 
+ *
  * Пример:Входные данные: candidates = [2, 3, 6, 7], target = 7
  * Вывод: [[2, 2, 3], [7]]
  * (Пояснение: 2 + 2 + 3 = 7, и само число 7 = 7).
  */
 
-function weave(current: number[], nums: number[], result: number[][], target:number) {
- let summ = current.reduce((prev, val) => {
-  return prev + val;
- }, 0)
+function weave(
+  current: number[],
+  nums: number[],
+  result: number[][],
+  target: number,
+  start = 0,
+  summ = 0
+) {
+  
 
- if (summ === target) {
-  result.push([...current])
- }
+  if (summ === target) {
+    result.push([...current]);
+    return;
+  }
 
- if (summ > target) {
-  return []
- }
+  if (summ > target) {
+    return;
+  }
 
+  for (let i = start; i < nums.length; i++) {
+    current.push(nums[i]);
 
+    weave(current, nums, result, target, i, summ + nums[i]);
 
+    current.pop();
+  }
 }
 
 function combinationSum(candidates: number[], target: number): number[][] {
-    const results: number[][] = [];
-    
-    weave([], candidates, results, target)
-    
-    return results;
+  const results: number[][] = [];
+
+  weave([], candidates, results, target);
+
+  return results;
 }
 
 // Тест 1: Из примера
