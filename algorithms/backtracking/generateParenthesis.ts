@@ -5,8 +5,34 @@
 function generateParenthesis(n: number): string[] {
   const result: string[] = [];
 
-  
-  
+  function weave(
+    current: string[],
+    n: number,
+    result: string[],
+    opened = 0,
+    closed = 0,
+  ) {
+    // выходим, если исчерпан лимит
+    if (current.length === 2 * n) {
+      result.push([...current].join(""));
+      return;
+    }
+
+    if (opened < n) {
+      current.push("(");
+      weave(current, n, result, opened + 1, closed);
+      current.pop();
+    }
+
+    if (closed < opened) {
+      current.push(")");
+      weave(current, n, result, opened, closed + 1);
+      current.pop();
+    }
+  }
+
+  weave([], n, result, 0);
+
   return result;
 }
 
@@ -15,26 +41,26 @@ function runParenthesesTests() {
     {
       name: "Тест 1: Одна пара скобок",
       n: 1,
-      expected: ["()"]
+      expected: ["()"],
     },
     {
       name: "Тест 2: Две пары скобок",
       n: 2,
-      expected: ["(())", "()()"]
+      expected: ["(())", "()()"],
     },
     {
       name: "Тест 3: Три пары скобок",
       n: 3,
-      expected: ["((()))", "(()())", "(())()", "()(())", "()()()"]
-    }
+      expected: ["((()))", "(()())", "(())()", "()(())", "()()()"],
+    },
   ];
 
   console.log("=== ЗАПУСК ТЕСТОВ (СКОБКИ) ===");
-  
+
   tests.forEach((test) => {
     try {
       const userResult = generateParenthesis(test.n);
-      
+
       // Сортируем массивы строк для корректного сравнения
       const format = (arr: string[]) => JSON.stringify([...arr].sort());
       const isCorrect = format(userResult) === format(test.expected);
