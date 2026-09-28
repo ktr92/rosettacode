@@ -12,6 +12,27 @@ class TreeNode {
 
 // Сигнатура целевой функции
 function isSubtree(t1: TreeNode | null, t2: TreeNode | null): boolean {
+ 
+ function treeString(node: TreeNode | null, treeArr: Array<string | number>) {
+  // конец ветки
+  if (node === null) {
+   treeArr.push('N');
+   return;
+  }
+
+  treeArr.push('#' + node.val)
+  treeString(node.left, treeArr)
+  treeString(node.right, treeArr)
+ }
+
+ const result1: Array<string | number> = [];
+ treeString(t1, result1);
+ const result2: Array<string | number> = [];
+ treeString(t2, result2);
+ return result1.join().includes(result2.join())
+}
+
+/* function isSubtree(t1: TreeNode | null, t2: TreeNode | null): boolean {
   // найти корень t2 в t1
   function findRoot(t1: TreeNode | null, t2: TreeNode | null): boolean {
     if (t1 === null) {
@@ -43,7 +64,7 @@ function isSubtree(t1: TreeNode | null, t2: TreeNode | null): boolean {
   }
 
   return findRoot(t1, t2);
-}
+} */
 
 /**
  *        T1 (Большое дерево)               T2 (Поддерево)
