@@ -121,30 +121,36 @@ class RandomizedBST {
    * Возвращает значение случайного узла дерева.
    * Вероятность выбора каждого узла должна быть строго одинаковой (1 / N).
    */
-   
+
   getRandomNode(): number {
+    if (!this.root) return 0;
+    
+    let current = this.root;
+    let rand = this.getRandomIntInclusive(1, current.size);
 
-   if (!this.root) return 0;
-   const rand = this.getRandomIntInclusive(1, this.root.size);
-   
-   let current = this.root;
+    while (true) {
+      
 
-  
-   let leftSize = current.left?.size;
-   let rightSize = current.right?.size;
+      let leftSize = current.left ? current.left.size : 0;
 
-   if (leftSize < rand) {
+      if (rand <= leftSize) {
+        current = current.left!;
+      } else if (rand === leftSize + 1) {
+        return current.val
+      } else {
+        rand = rand - leftSize - 1;
+        current = current.right!;
+      }
 
-   }
 
-    return 0;
+    }
   }
 
-  private  getRandomIntInclusive(min: number, max: number): number {
-   min = Math.ceil(min);
-   max = Math.floor(max);
-   return Math.floor(Math.random() * (max - min + 1)) + min;
- }
+  private getRandomIntInclusive(min: number, max: number): number {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 }
 
 /**
