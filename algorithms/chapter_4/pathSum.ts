@@ -21,38 +21,61 @@ class TreeNode {
 }
 
 function pathSum(root: TreeNode | null, targetSum: number): number {
-  // Ваша логика
+  const summMap = new Map<number, number>(); // каждая сумма -> сколько раз встречалась
+  summMap.set(0, 1);
 
-  if (!root) return 0;
-  if (!root.left && !root.right) {
-    if (root.val === targetSum) return 1;
-    if (root.val !== targetSum) return 0;
-  }
-
-  function getDeep(summ: number, node: TreeNode | null, results: number[]) {
-    if (summ === targetSum) {
-      results.push(1);
-    }
-
+  function dfs(node: TreeNode | null, totalSumm: number): number {
     if (node === null) {
-      return;
+      return 0;
     }
-    const leftNode = node.left;
-    const rightNoe = node.right;
+    totalSumm += node.val;
 
-    if (leftNode !== null) {
-      getDeep(summ + leftNode.val, leftNode, results);
-    }
-    if (rightNoe !== null) {
-      getDeep(summ + rightNoe.val, rightNoe, results);
-    }
+    let result = summMap.get(totalSumm - targetSum) || 0;
+
+    let prevValue = summMap.get(totalSumm) || 0;
+    summMap.set(totalSumm, prevValue + 1);
+
+    result += dfs(node.left, totalSumm);
+    result += dfs(node.right, totalSumm);
+
+    const countAfter = summMap.get(totalSumm) || 0;
+    summMap.set(totalSumm, countAfter - 1);
+
+    return result;
   }
 
-  const results: number[] = [];
-  getDeep(root.val, root, results);
-
-  return results.length;
+  return dfs(root, 0);
 }
+
+/* 
+function pathSum(root: TreeNode | null, targetSum: number): number {
+  if (!root) return 0;
+
+  function getSumm(summ: number, node: TreeNode | null): number {
+    if (node === null) {
+      return 0;
+    }
+
+    let newsumm = summ + node.val;
+    let result = 0;
+
+    if (newsumm === targetSum) {
+      result++
+    }
+
+    return result + getSumm(newsumm, node.left) + getSumm(newsumm, node.right);
+  }
+
+  function nextSumm(node: TreeNode | null): number {
+    if (node === null) {
+      return 0;
+    }
+
+    return getSumm(0, node) + nextSumm(node.left) + nextSumm(node.right);
+  }
+
+  return nextSumm(root);
+} */
 
 // ============================================================================
 // ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ДЛЯ СБОРКИ ДЕРЕВА
@@ -111,7 +134,7 @@ function runTests() {
       name: "Бамбук (линейное дерево с нулями)",
       array: [2, null, 1, null, 0, null, 3],
       targetSum: 3,
-      expected: 3,
+      expected: 4,
     },
     {
       id: 4,
